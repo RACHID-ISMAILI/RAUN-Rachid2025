@@ -1,0 +1,23 @@
+body {
+  background-color: black;
+  color: lime;
+  font-family: monospace;
+  padding: 20px;
+}
+.profile {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+nav a {
+  margin-right: 15px;
+  color: cyan;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  background: black;
+  color: lime;
+  border: 1px solid lime;
+}

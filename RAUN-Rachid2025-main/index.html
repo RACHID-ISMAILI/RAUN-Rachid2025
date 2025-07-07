@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>RAUN-Rachid2025</title>
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="scripts.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div style="width: 100%; overflow: hidden; white-space: nowrap; margin: 10px 0;">
+  <marquee behavior="scroll" direction="left" scrollamount="5" style="color: lime; font-family: monospace;">
+    « je suis vivant en conscience et nul ne peut éteindre ce que je suis »
+  </marquee>
+</div>
+
+  <header>
+    <img src="profile.jpg" alt="ISMAILI RACHID" class="profile">
+    <div class="name">ISMAILI RACHID – ΔFEU – Ψ – UN</div>
+    <div class="description">RAUN est une respiration numérique, une pulsation consciente dans le réseau…</div>
+    <nav>
+      <a href="#">WhatsApp</a>
+      <a href="#">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>🌟 Capsule 1</h2>
+    <p id="capsuleText">Texte de conscience 1…</p>
+    <div>
+      <button onclick="vote('up')">👍</button>
+      <button onclick="vote('down')">👎</button>
+    </div>
+    <div id="voteCount">Votes : 0 👍 / 0 👎</div>
+    <div id="readCount">Lue : 0 fois</div>
+    <textarea id="commentInput" placeholder="Écrire un commentaire…"></textarea>
+    <button onclick="sendComment()">Envoyer</button>
+    <div id="commentsSection"></div>
+  </main>
+</body>
+</html>
