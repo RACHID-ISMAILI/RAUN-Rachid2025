@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,9 +8,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="scrolling-message">
-    <marquee behavior="scroll" direction="left">✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis... ✨</marquee>
-  </div>
+  <marquee class="slogan">✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis... ✨</marquee>
   <header>
     <img src="profile.jpg" alt="ISMAILI RACHID" class="profile">
     <div class="name">ISMAILI RACHID – ΔFEU – Ψ – UN</div>
@@ -23,18 +20,17 @@
       <a href="admin.html">Admin</a>
     </nav>
   </header>
-
   <main>
     <h2>🌟 Capsule 1</h2>
     <p id="capsuleText">Chargement...</p>
     <div>
-      <button id="upVote">👍</button>
-      <button id="downVote">👎</button>
+      <button onclick="vote('up')">👍</button>
+      <button onclick="vote('down')">👎</button>
     </div>
     <div id="voteCount">Votes : 0 👍 / 0 👎</div>
     <div id="readCount">Lue : 0 fois</div>
     <textarea id="commentInput" placeholder="Écrire un commentaire…"></textarea>
-    <button id="sendComment">Envoyer</button>
+    <button onclick="sendComment()">Envoyer</button>
     <div id="commentsSection"></div>
   </main>
 </body>

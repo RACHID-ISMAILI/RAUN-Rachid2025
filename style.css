@@ -1,23 +1,26 @@
-
 body {
   background-color: black;
   color: lime;
   font-family: monospace;
   padding: 20px;
 }
+.slogan {
+  color: lime;
+  font-weight: bold;
+}
 .profile {
   width: 100px;
   border-radius: 50%;
+  border: 3px solid lime;
 }
-.name {
-  font-size: 14px;
-  color: cyan;
+.name, .description {
+  margin-top: 10px;
 }
 nav a {
-  color: lime;
+  color: cyan;
   margin-right: 10px;
 }
-textarea {
-  width: 100%;
+textarea, input, button {
+  font-family: monospace;
   margin-top: 10px;
 }
