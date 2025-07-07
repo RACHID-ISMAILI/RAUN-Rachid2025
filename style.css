@@ -4,28 +4,20 @@ body {
   font-family: monospace;
   padding: 20px;
 }
-.profile-photo {
+.profile {
   width: 80px;
+  height: 80px;
   border-radius: 50%;
-  border: 2px solid lime;
-  float: left;
-  margin-right: 10px;
 }
-#nom {
-  font-size: 14px;
-}
-#citations {
-  margin: 10px 0;
-}
-#boutons a {
+nav a {
+  margin-right: 15px;
   color: cyan;
-  margin-right: 10px;
-  text-decoration: none;
 }
-.commentaires textarea {
+textarea {
   width: 100%;
-  height: 50px;
-  background-color: black;
+  height: 100px;
+  margin-top: 10px;
+  background: black;
   color: lime;
   border: 1px solid lime;
 }

@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8" /><title>Admin RAUN</title></head>
-<body style="background:black;color:lime;font-family:monospace;padding:20px;">
-<h2>Connexion admin</h2>
-<p>Email + mot de passe (Firebase)</p>
-<!-- Login form Firebase ici (à intégrer dans étape suivante) -->
-<br><a href="index.html" style="color:cyan;">🔙 Retour à la page publique</a>
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin RAUN</title>
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="auth-admin.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Connexion Admin 🔐</h2>
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Mot de passe"><br>
+  <button onclick="login()">Se connecter</button>
 </body>
 </html>
