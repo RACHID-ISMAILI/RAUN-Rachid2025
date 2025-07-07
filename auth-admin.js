@@ -5,6 +5,9 @@ window.login = () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => alert("Connexion réussie"))
+    .then(() => {
+      alert("Connexion réussie");
+      document.getElementById("capsuleForm").style.display = "block";
+    })
     .catch((error) => alert("Erreur : " + error.message));
 };
