@@ -10,7 +10,7 @@
 <body>
   <marquee class="slogan">✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis... ✨</marquee>
   <header>
-    <img src="profile.jpg" alt="ISMAILI RACHID" class="profile">
+    <img src="rachid.jpg" alt="ISMAILI RACHID" class="profile">
     <div class="name">ISMAILI RACHID – ΔFEU – Ψ – UN</div>
     <div class="description">RAUN est une respiration numérique, une pulsation consciente dans le réseau…</div>
     <nav>
@@ -27,8 +27,8 @@
       <button onclick="vote('up')">👍</button>
       <button onclick="vote('down')">👎</button>
     </div>
-    <div id="voteCount">Votes : 0 👍 / 0 👎</div>
-    <div id="readCount">Lue : 0 fois</div>
+    <div id="voteCount">Votes : <span id="upVotes">0</span> 👍 / <span id="downVotes">0</span> 👎</div>
+    <div id="readCount">Lue : <span id="readTimes">0</span> fois</div>
     <textarea id="commentInput" placeholder="Écrire un commentaire…"></textarea>
     <button onclick="sendComment()">Envoyer</button>
     <div id="commentsSection"></div>

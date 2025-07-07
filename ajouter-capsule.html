@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nouvelle Capsule – RAUN</title>
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="ajouter-capsule.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="index.html" class="retour">← Retour à la page publique</a>
+  <h2>✍️ Écrire une nouvelle capsule</h2>
+  <label for="title">Titre :</label><br>
+  <input type="text" id="title" placeholder="Titre de la capsule"><br><br>
+  <label for="content">Texte :</label><br>
+  <textarea id="content" rows="8" placeholder="Écris ici ton message de conscience..."></textarea><br>
+  <button onclick="ajouterCapsule()">Publier la capsule</button>
+</body>
+</html>
