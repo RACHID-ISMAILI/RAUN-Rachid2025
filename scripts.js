@@ -1,6 +1,6 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -51,10 +51,40 @@ window.commenter = async function (id) {
   if (!text) return;
   const capsuleRef = doc(db, "capsules", id);
   await updateDoc(capsuleRef, {
-    commentaires: firebase.firestore.FieldValue.arrayUnion(text)
+    commentaires: arrayUnion(text)
   });
   alert("Commentaire ajouté.");
   textarea.value = "";
 };
 
 afficherCapsules();
+
+// Fonction de vote +
+window.voteUp = async function(id) {
+  const docRef = doc(db, "capsules", id);
+  await updateDoc(docRef, {
+    votes_up: increment(1)
+  });
+  document.getElementById(`vote-${id}`).innerText = "👍 vote en cours...";
+  setTimeout(() => window.location.reload(), 600);
+};
+
+// Fonction de vote -
+window.voteDown = async function(id) {
+  const docRef = doc(db, "capsules", id);
+  await updateDoc(docRef, {
+    votes_down: increment(1)
+  });
+  document.getElementById(`vote-${id}`).innerText = "👎 vote en cours...";
+  setTimeout(() => window.location.reload(), 600);
+};
+
+// Fonction lecture
+window.incrementLectures = async function(id) {
+  const docRef = doc(db, "capsules", id);
+  await updateDoc(docRef, {
+    lectures: increment(1)
+  });
+  document.getElementById(`lect-${id}`).innerText = "Lecture en cours...";
+  setTimeout(() => window.location.reload(), 800);
+};
