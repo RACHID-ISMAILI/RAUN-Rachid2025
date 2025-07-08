@@ -1,3 +1,4 @@
+
 body {
   background-color: black;
   color: lime;
@@ -7,29 +8,28 @@ body {
 header {
   text-align: center;
 }
-.profile-img {
-  width: 120px;
+.profile {
+  width: 100px;
   border-radius: 50%;
-  border: 2px solid lime;
 }
-marquee {
-  color: cyan;
-  font-size: 1.2rem;
-  margin: 15px 0;
+.name {
+  font-size: 1.5rem;
+  margin-top: 10px;
 }
-.capsule {
-  border-bottom: 1px solid green;
+.description {
+  margin-bottom: 10px;
+}
+.message-defilant {
   margin: 10px 0;
-  padding: 10px;
+  font-weight: bold;
 }
-#subscribe {
-  margin-top: 40px;
-  text-align: center;
-}
-input, button {
-  padding: 8px;
-  margin: 5px;
+button, input, textarea {
   background-color: black;
   color: lime;
   border: 1px solid lime;
+  padding: 5px;
+  margin-top: 5px;
+}
+textarea {
+  width: 100%;
 }

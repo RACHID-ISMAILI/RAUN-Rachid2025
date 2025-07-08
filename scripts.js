@@ -1,31 +1,60 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDRpjiF3EcSA_7TuGkNLp1bxu3iWoY_XnE",
-  authDomain: "raun2025-1558d.firebaseapp.com",
-  projectId: "raun2025-1558d",
-  storageBucket: "raun2025-1558d.appspot.com",
-  messagingSenderId: "133273741918",
-  appId: "1:133273741918:web:a32b098aac154e42a062cf"
-};
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+window.subscribe = function () {
+  const email = document.getElementById("subscribeEmail").value.trim();
+  if (email) alert("Merci pour votre abonnement : " + email);
+};
+
 async function afficherCapsules() {
-  const capsulesContainer = document.getElementById("capsules-container");
+  const container = document.getElementById("capsulesContainer");
   const querySnapshot = await getDocs(collection(db, "capsules"));
-  capsulesContainer.innerHTML = "";
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    const capsuleHTML = `
-      <div class="capsule">
-        <h3>${data.titre}</h3>
-        <p>${data.texte}</p>
-      </div>`;
-    capsulesContainer.innerHTML += capsuleHTML;
+  container.innerHTML = "";
+  querySnapshot.forEach(async (docSnap) => {
+    const data = docSnap.data();
+    const capsuleDiv = document.createElement("div");
+    capsuleDiv.innerHTML = `
+      <h2>${data.titre}</h2>
+      <p>${data.contenu}</p>
+      <div>
+        <button onclick="voter('${docSnap.id}', 'up')">👍</button>
+        <button onclick="voter('${docSnap.id}', 'down')">👎</button>
+      </div>
+      <div id="votes-${docSnap.id}">Votes : ${data.votes_up} 👍 / ${data.votes_down} 👎</div>
+      <div>Lectures : ${data.lectures || 0}</div>
+      <textarea id="comment-${docSnap.id}" placeholder="Écrire un commentaire…"></textarea>
+      <button onclick="commenter('${docSnap.id}')">Envoyer</button>
+    `;
+    container.appendChild(capsuleDiv);
+
+    // Compter la lecture
+    const capsuleRef = doc(db, "capsules", docSnap.id);
+    await updateDoc(capsuleRef, { lectures: increment(1) });
   });
 }
+
+window.voter = async function (id, type) {
+  const capsuleRef = doc(db, "capsules", id);
+  const field = type === "up" ? "votes_up" : "votes_down";
+  await updateDoc(capsuleRef, { [field]: increment(1) });
+  location.reload();
+};
+
+window.commenter = async function (id) {
+  const textarea = document.getElementById("comment-" + id);
+  const text = textarea.value.trim();
+  if (!text) return;
+  const capsuleRef = doc(db, "capsules", id);
+  await updateDoc(capsuleRef, {
+    commentaires: firebase.firestore.FieldValue.arrayUnion(text)
+  });
+  alert("Commentaire ajouté.");
+  textarea.value = "";
+};
 
 afficherCapsules();
