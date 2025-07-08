@@ -5,12 +5,31 @@ body {
   font-family: monospace;
   padding: 20px;
 }
-
-button {
-  margin: 5px;
-  padding: 5px 10px;
+header {
+  text-align: center;
+}
+.profile {
+  width: 100px;
+  border-radius: 50%;
+}
+.name {
+  font-size: 1.5rem;
+  margin-top: 10px;
+}
+.description {
+  margin-bottom: 10px;
+}
+.message-defilant {
+  margin: 10px 0;
+  font-weight: bold;
+}
+button, input, textarea {
   background-color: black;
-  border: 1px solid lime;
   color: lime;
-  cursor: pointer;
+  border: 1px solid lime;
+  padding: 5px;
+  margin-top: 5px;
+}
+textarea {
+  width: 100%;
 }

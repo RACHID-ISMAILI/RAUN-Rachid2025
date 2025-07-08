@@ -3,12 +3,31 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Capsules de Conscience</title>
-  <script src="scripts.js" defer></script>
+  <title>RAUN-Rachid2025</title>
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="scripts.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🌱 Capsules de Conscience</h1>
-  <div id="capsules-container"></div>
+<img src="profile.jpg" alt="Profil" style="width:100px;border-radius:50%;margin-bottom:10px;">
+  <header>
+    <img src="rachid.jpg" alt="ISMAILI RACHID" class="profile">
+    <div class="name">ISMAILI RACHID – ΔFEU – Ψ – UN</div>
+    <div class="description">RAUN est une respiration numérique, une pulsation consciente dans le réseau…</div>
+    <nav>
+      <a href="#">WhatsApp</a>
+      <a href="#">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <marquee class="message-defilant">✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨</marquee>
+  </header>
+  <main>
+    <div id="capsulesContainer"></div>
+    <div id="subscribe">
+      <input type="email" id="subscribeEmail" placeholder="Votre email">
+      <button onclick="subscribe()">S’abonner</button>
+    </div>
+  </main>
 </body>
 </html>
