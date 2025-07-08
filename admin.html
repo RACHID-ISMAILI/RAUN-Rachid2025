@@ -1,15 +1,92 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <title>Admin RAUN</title>
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="auth-admin.js"></script>
-  <script type="module" src="admin-capsule.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRpjiF3EcSA_7TuGkNLp1bxu3iWoY_XnE",
+      authDomain: "raun2025-1558d.firebaseapp.com",
+      projectId: "raun2025-1558d",
+      storageBucket: "raun2025-1558d.appspot.com",
+      messagingSenderId: "133273741918",
+      appId: "1:133273741918:web:a32b098aac154e42a062cf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    window.login = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          alert("Connexion réussie");
+          document.getElementById("capsuleForm").style.display = "block";
+        })
+        .catch((error) => alert("Erreur de connexion : " + error.message));
+    };
+
+    window.ajouterCapsule = async function () {
+      const titre = document.getElementById("title").value.trim();
+      const contenu = document.getElementById("content").value.trim();
+
+      if (!titre || !contenu) {
+        alert("Merci de remplir tous les champs.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "capsules"), {
+          titre: titre,
+          contenu: contenu,
+          date: serverTimestamp(),
+          lectures: 0,
+          votes_up: 0,
+          votes_down: 0,
+          commentaires: []
+        });
+        alert("Capsule ajoutée avec succès !");
+        document.getElementById("title").value = "";
+        document.getElementById("content").value = "";
+      } catch (e) {
+        alert("Erreur lors de l'ajout de la capsule : " + e.message);
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: monospace;
+      padding: 20px;
+    }
+    h2, h3 {
+      color: #00ff00;
+    }
+    textarea, input, button {
+      background-color: black;
+      color: lime;
+      font-family: monospace;
+      border: 1px solid lime;
+      padding: 5px;
+    }
+    .retour {
+      color: cyan;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-  <a href="index.html">← Retour à la page publique</a>
+  <a href="index.html" class="retour">← Retour à la page publique</a>
   <h2>Connexion Admin 🔐</h2>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Mot de passe"><br>
