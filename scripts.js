@@ -1,23 +1,31 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDRpjiF3EcSA_7TuGkNLp1bxu3iWoY_XnE",
+  authDomain: "raun2025-1558d.firebaseapp.com",
+  projectId: "raun2025-1558d",
+  storageBucket: "raun2025-1558d.appspot.com",
+  messagingSenderId: "133273741918",
+  appId: "1:133273741918:web:a32b098aac154e42a062cf"
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function afficherCapsules() {
-  const capsuleList = document.getElementById("capsuleList");
-  if (!capsuleList) return;
-
+  const capsulesContainer = document.getElementById("capsules-container");
   const querySnapshot = await getDocs(collection(db, "capsules"));
-  capsuleList.innerHTML = "";
-
+  capsulesContainer.innerHTML = "";
   querySnapshot.forEach((doc) => {
     const data = doc.data();
-    const div = document.createElement("div");
-    div.innerHTML = `<h3>${data.titre}</h3><p>${data.contenu}</p><hr>`;
-    capsuleList.appendChild(div);
+    const capsuleHTML = `
+      <div class="capsule">
+        <h3>${data.titre}</h3>
+        <p>${data.texte}</p>
+      </div>`;
+    capsulesContainer.innerHTML += capsuleHTML;
   });
 }
 
-window.addEventListener("DOMContentLoaded", afficherCapsules);
+afficherCapsules();

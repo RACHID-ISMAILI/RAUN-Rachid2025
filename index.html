@@ -2,22 +2,30 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>RAUN Capsules</title>
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="scripts.js"></script>
-  <style>
-    body {
-      background-color: black;
-      color: lime;
-      font-family: monospace;
-      padding: 20px;
-    }
-    h1 { color: cyan; }
-    hr { border: 1px solid green; }
-  </style>
+  <title>RAUN - Accueil</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🌱 Capsules de Conscience</h1>
-  <div id="capsuleList">Chargement...</div>
+  <header>
+    <img src="rachid.jpg" alt="Photo de Rachid" class="profile-img" />
+    <h1>RAUN - Réseau d'Âmes Unifiées en Naissance</h1>
+    <marquee>✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨</marquee>
+  </header>
+
+  <main>
+    <section id="capsules-container">
+      <!-- Les capsules apparaîtront ici -->
+    </section>
+
+    <section id="subscribe">
+      <h3>S’abonner à RAUN ✉️</h3>
+      <form>
+        <input type="email" placeholder="Votre email..." required />
+        <button type="submit">S’abonner</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="scripts.js"></script>
 </body>
 </html>
