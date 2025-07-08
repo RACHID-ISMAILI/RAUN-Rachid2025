@@ -1,71 +1,82 @@
-import { db } from './firebase-config.js';
-import { collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-// Récupère toutes les capsules et les affiche
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  increment,
+  addDoc,
+  serverTimestamp,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 async function afficherToutesLesCapsules() {
-  const capsulesRef = collection(db, "capsules");
-  const querySnapshot = await getDocs(capsulesRef);
+  const capsuleContainer = document.querySelector("main");
+  capsuleContainer.innerHTML = "";
 
-  const main = document.querySelector("main");
-  main.innerHTML = ""; // Nettoie le contenu précédent
+  const q = query(collection(db, "capsules"), orderBy("date", "desc"));
+  const snapshot = await getDocs(q);
 
-  querySnapshot.forEach(docSnap => {
+  snapshot.forEach((docSnap) => {
     const data = docSnap.data();
     const capsuleId = docSnap.id;
 
-    const section = document.createElement("section");
-    section.innerHTML = `
-      <h2>🌟 ${data.title}</h2>
-      <p>${data.content}</p>
+    const capsuleDiv = document.createElement("div");
+    capsuleDiv.classList.add("capsule");
+
+    capsuleDiv.innerHTML = `
+      <h2>🌟 ${data.titre}</h2>
+      <p>${data.contenu}</p>
       <div>
         <button onclick="vote('${capsuleId}', 'up')">👍</button>
         <button onclick="vote('${capsuleId}', 'down')">👎</button>
       </div>
-      <div id="vote-${capsuleId}">Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
-      <div id="read-${capsuleId}">Lue : ${data.lues || 0} fois</div>
-      <textarea id="comment-${capsuleId}" placeholder="Écrire un commentaire…"></textarea>
+      <div id="voteCount-${capsuleId}">Votes : ${data.votes_up} 👍 / ${data.votes_down} 👎</div>
+      <div id="readCount-${capsuleId}">Lue : ${data.lectures} fois</div>
+      <textarea id="commentInput-${capsuleId}" placeholder="Écrire un commentaire…"></textarea>
       <button onclick="sendComment('${capsuleId}')">Envoyer</button>
-      <div id="comments-${capsuleId}"></div>
+      <div id="commentsSection-${capsuleId}">
+        ${data.commentaires?.map(c => `<p>${c}</p>`).join("") || ""}
+      </div>
     `;
-    main.appendChild(section);
 
-    // Incrémente le compteur de lecture
-    incrementReadCount(capsuleId);
+    capsuleContainer.appendChild(capsuleDiv);
+
+    // Incrément des lectures
+    updateDoc(doc(db, "capsules", capsuleId), {
+      lectures: increment(1)
+    });
   });
 }
 
-// Incrémente le compteur de lecture
-async function incrementReadCount(id) {
-  const capsuleRef = doc(db, "capsules", id);
-  await updateDoc(capsuleRef, {
-    lues: increment(1)
-  });
-}
-
-// Vote 👍👎
 window.vote = async function(id, type) {
-  const capsuleRef = doc(db, "capsules", id);
-  const field = type === 'up' ? 'votes_up' : 'votes_down';
-  await updateDoc(capsuleRef, {
-    [field]: increment(1)
+  const champ = type === "up" ? "votes_up" : "votes_down";
+  await updateDoc(doc(db, "capsules", id), {
+    [champ]: increment(1)
   });
-
-  // Recharger les capsules pour mettre à jour les votes
   afficherToutesLesCapsules();
 };
 
-// Simule l'envoi de commentaires
-window.sendComment = function(id) {
-  const input = document.getElementById("comment-" + id);
-  const content = input.value.trim();
-  if (content) {
-    const div = document.getElementById("comments-" + id);
-    const p = document.createElement("p");
-    p.textContent = "💬 " + content;
-    div.appendChild(p);
-    input.value = "";
-  }
+window.sendComment = async function(id) {
+  const input = document.getElementById(`commentInput-${id}`);
+  const newComment = input.value.trim();
+  if (!newComment) return;
+
+  const docRef = doc(db, "capsules", id);
+  const snap = await getDocs(query(collection(db, "capsules")));
+  const oldData = snap.docs.find(d => d.id === id).data();
+  const newComments = [...(oldData.commentaires || []), newComment];
+
+  await updateDoc(docRef, { commentaires: newComments });
+  input.value = "";
+  afficherToutesLesCapsules();
 };
 
-// Initialise la page
 afficherToutesLesCapsules();
