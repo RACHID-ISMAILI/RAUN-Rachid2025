@@ -1,11 +1,11 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.ajouterCapsule = async function () {
+document.getElementById("publishButton").addEventListener("click", async () => {
   const titre = document.getElementById("title").value.trim();
   const contenu = document.getElementById("content").value.trim();
 
@@ -16,8 +16,8 @@ window.ajouterCapsule = async function () {
 
   try {
     await addDoc(collection(db, "capsules"), {
-      titre: titre,
-      contenu: contenu,
+      titre,
+      contenu,
       date: serverTimestamp(),
       lectures: 0,
       votes_up: 0,
@@ -28,6 +28,6 @@ window.ajouterCapsule = async function () {
     document.getElementById("title").value = "";
     document.getElementById("content").value = "";
   } catch (e) {
-    alert("Erreur lors de l'ajout de la capsule : " + e.message);
+    alert("Erreur : " + e.message);
   }
-};
+});

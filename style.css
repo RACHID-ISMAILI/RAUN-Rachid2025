@@ -1,1 +1,13 @@
-body { background-color: black; color: lime; font-family: monospace; padding: 20px; } h2, h3 { color: cyan; }
+body {
+  background-color: black;
+  color: lime;
+  font-family: monospace;
+}
+.profile {
+  width: 100px;
+  border-radius: 50%;
+}
+.message-defilant {
+  color: #00ff00;
+  font-weight: bold;
+}
