@@ -1,21 +1,22 @@
-import { firebaseConfig, db } from './firebase-config.js';
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
 
-const capsulesCollection = collection(db, "capsules");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 async function afficherCapsules() {
-  const querySnapshot = await getDocs(capsulesCollection);
-  const container = document.getElementById("capsules-container");
-  container.innerHTML = "";
+  const capsuleList = document.getElementById("capsuleList");
+  if (!capsuleList) return;
+
+  const querySnapshot = await getDocs(collection(db, "capsules"));
+  capsuleList.innerHTML = "";
+
   querySnapshot.forEach((doc) => {
     const data = doc.data();
     const div = document.createElement("div");
-    div.className = "capsule";
-    div.innerHTML = `
-      <h3>${data.titre}</h3>
-      <p>${data.contenu}</p>
-    `;
-    container.appendChild(div);
+    div.innerHTML = `<h3>${data.titre}</h3><p>${data.contenu}</p><hr>`;
+    capsuleList.appendChild(div);
   });
 }
 
