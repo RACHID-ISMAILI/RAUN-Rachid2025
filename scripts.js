@@ -1,19 +1,26 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { firebaseConfig } from './firebase-config.js';
+import { db } from './firebase-config.js';
+import { doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+document.addEventListener("DOMContentLoaded", async () => {
+  const capsuleRef = doc(db, "capsules", "capsule1");
 
-async function chargerCapsules() {
-  const container = document.getElementById("capsulesContainer");
-  const querySnapshot = await getDocs(collection(db, "capsules"));
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    const div = document.createElement("div");
-    div.innerHTML = `<h3>${data.titre}</h3><p>${data.contenu}</p><hr>`;
-    container.appendChild(div);
-  });
-}
+  const docSnap = await getDoc(capsuleRef);
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    document.getElementById("capsuleText").textContent = data.text;
+    document.getElementById("voteCount").textContent = `Votes : ${data.up || 0} 👍 / ${data.down || 0} 👎`;
+    document.getElementById("readCount").textContent = `Lue : ${data.reads || 0} fois`;
+    await updateDoc(capsuleRef, { reads: increment(1) });
+  }
+});
 
-chargerCapsules();
+window.vote = async (type) => {
+  const capsuleRef = doc(db, "capsules", "capsule1");
+  await updateDoc(capsuleRef, { [type]: increment(1) });
+  location.reload();
+};
+
+window.sendComment = () => {
+  const input = document.getElementById("commentInput").value;
+  if (input) alert("Commentaire envoyé : " + input); // Simplicité, Firebase en étape suivante
+};

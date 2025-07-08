@@ -1,7 +1,7 @@
 import { auth } from './firebase-config.js';
-import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 
-document.getElementById("loginButton").addEventListener("click", () => {
+window.login = () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   signInWithEmailAndPassword(auth, email, password)
@@ -10,4 +10,4 @@ document.getElementById("loginButton").addEventListener("click", () => {
       document.getElementById("capsuleForm").style.display = "block";
     })
     .catch((error) => alert("Erreur : " + error.message));
-});
+};
