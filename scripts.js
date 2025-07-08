@@ -1,26 +1,25 @@
-import { db } from './firebase-config.js';
-import { doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const capsuleRef = doc(db, "capsules", "capsule1");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  const docSnap = await getDoc(capsuleRef);
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    document.getElementById("capsuleText").textContent = data.text;
-    document.getElementById("voteCount").textContent = `Votes : ${data.up || 0} 👍 / ${data.down || 0} 👎`;
-    document.getElementById("readCount").textContent = `Lue : ${data.reads || 0} fois`;
-    await updateDoc(capsuleRef, { reads: increment(1) });
-  }
-});
+const container = document.getElementById("capsules-container");
 
-window.vote = async (type) => {
-  const capsuleRef = doc(db, "capsules", "capsule1");
-  await updateDoc(capsuleRef, { [type]: increment(1) });
-  location.reload();
-};
+async function chargerCapsules() {
+  const capsulesRef = collection(db, "capsules");
+  const snapshot = await getDocs(capsulesRef);
+  snapshot.forEach((doc) => {
+    const capsule = doc.data();
+    const capsuleDiv = document.createElement("div");
+    capsuleDiv.innerHTML = `
+      <h3>${capsule.titre}</h3>
+      <p>${capsule.contenu}</p>
+      <p><small>Votes 👍 ${capsule.votes_up || 0} / 👎 ${capsule.votes_down || 0} – Lue ${capsule.lectures || 0} fois</small></p>
+      <hr>`;
+    container.appendChild(capsuleDiv);
+  });
+}
 
-window.sendComment = () => {
-  const input = document.getElementById("commentInput").value;
-  if (input) alert("Commentaire envoyé : " + input); // Simplicité, Firebase en étape suivante
-};
+chargerCapsules();
