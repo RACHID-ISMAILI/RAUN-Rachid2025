@@ -12,10 +12,25 @@ canvas#matrixRain {
   position: fixed;
   left: 0; top: 0;
   width: 100vw; height: 100vh;
-  z-index: 0;
+  z-index: 0 !important;
   pointer-events: none;
 }
 
+/* Tous les blocs importants devant la pluie Matrix */
+.profile-photo,
+header,
+.carousel-container,
+.capsule,
+.subscribe-form,
+.admin-box,
+#adminPanel,
+.login-box,
+#carousel {
+  position: relative;
+  z-index: 10;
+}
+
+/* Photo de profil */
 .profile-photo {
   display: block;
   margin: 28px auto 12px auto;
@@ -24,15 +39,11 @@ canvas#matrixRain {
   border: 4px solid #00ff99;
   box-shadow: 0 0 36px #00ff66;
   background: #111;
-  z-index: 1;
-  position: relative;
 }
 
 header {
   text-align: center;
   margin-bottom: 12px;
-  z-index: 1;
-  position: relative;
 }
 header h1 {
   font-size: 1.85em;
@@ -79,7 +90,6 @@ marquee.message-defilant {
   align-items: center;
   margin: 34px 0 8px 0;
   gap: 14px;
-  z-index: 2;
 }
 .carousel-btn {
   font-size: 2.5em;
@@ -89,10 +99,9 @@ marquee.message-defilant {
   cursor: pointer;
   transition: transform 0.1s;
   padding: 0 17px;
-  z-index: 2;
 }
 .carousel-btn:active { transform: scale(1.17); }
-#carousel { min-width: 340px; max-width: 780px; width: 100%; z-index:2; }
+#carousel { min-width: 340px; max-width: 780px; width: 100%; }
 
 /* Capsule affichée (public) */
 .capsule {
@@ -104,8 +113,6 @@ marquee.message-defilant {
   background: rgba(8, 25, 8, 0.95);
   box-shadow: 0 0 30px #15e03e77;
   font-size: 1.25em;
-  z-index: 3;
-  position: relative;
 }
 .capsule b {
   font-size: 1.24em;
@@ -122,36 +129,87 @@ marquee.message-defilant {
 /* Commentaires */
 .capsule textarea {
   width: 100%;
-  min-height: 38px;
-  font-size: 1.06em;
+  min-height: 48px;  /* PLUS GRAND */
+  font-size: 1.13em;
   margin-top: 13px;
   margin-bottom: 8px;
   background: #061b08;
   color: #aaffcc;
   border-radius: 8px;
   border: 1px solid #33ff33;
-  padding: 7px 10px;
+  padding: 10px 13px;
   resize: vertical;
 }
 .capsule .commentaires {
   margin-top: 12px;
-  font-size: 0.99em;
+  font-size: 1.02em;
   color: #7cfbb1;
 }
 .capsule .comment {
   background: #0e1c13;
   border-radius: 7px;
   margin: 5px 0;
-  padding: 5px 11px;
+  padding: 7px 15px;
   color: #f7ffe7;
+}
+
+/* Formulaire admin (capsule/article) */
+.admin-box, #adminPanel {
+  background: rgba(8, 25, 8, 0.97);
+  border-radius: 18px;
+  box-shadow: 0 0 25px #1aff63bb;
+  padding: 35px 38px 24px 38px;
+  max-width: 780px;
+  margin: 38px auto 0 auto;
+  z-index: 12;
+}
+.admin-box textarea,
+#adminPanel textarea {
+  width: 100%;
+  min-height: 180px; /* ENORME pour articles ! */
+  font-size: 1.15em;
+  background: #061b08;
+  color: #aaffcc;
+  border-radius: 8px;
+  border: 1.5px solid #33ff33;
+  padding: 13px 15px;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+.admin-box input[type="text"],
+#adminPanel input[type="text"] {
+  width: 100%;
+  font-size: 1.12em;
+  padding: 8px 14px;
+  margin-bottom: 17px;
+  background: #071a0a;
+  color: #aaffcc;
+  border-radius: 9px;
+  border: 1.5px solid #00ff66;
+}
+
+.admin-box button, #adminPanel button {
+  background: #00ff66;
+  color: #222;
+  font-size: 1.14em;
+  font-weight: 600;
+  border-radius: 9px;
+  border: none;
+  padding: 8px 22px;
+  cursor: pointer;
+  margin: 4px 0;
+  transition: background 0.2s, color 0.2s;
+}
+.admin-box button:hover, #adminPanel button:hover {
+  background: #111;
+  color: #00ff66;
+  border: 1.2px solid #00ff66;
 }
 
 /* Abonnement */
 .subscribe-form {
   margin: 32px auto 12px auto;
   text-align: center;
-  z-index: 1;
-  position: relative;
 }
 .subscribe-form input[type="email"] {
   font-size: 1.13em;
@@ -182,16 +240,17 @@ marquee.message-defilant {
 
 /* Responsive */
 @media (max-width: 900px) {
-  .capsule, .admin-box {
+  .capsule, .admin-box, #adminPanel {
     max-width: 98vw;
     padding-left: 7vw;
     padding-right: 7vw;
   }
 }
 @media (max-width: 600px) {
-  .capsule, .admin-box {
+  .capsule, .admin-box, #adminPanel {
     padding: 7vw 3vw;
     font-size: 1em;
   }
   .carousel-container { flex-direction: column; gap: 0; }
+  .profile-photo { width: 68px; }
 }
