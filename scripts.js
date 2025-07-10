@@ -14,7 +14,7 @@ function markVoted(id) {
   localStorage.setItem('voted_' + id, "1");
 }
 
-// --- Correction principale ici ---
+// --- Affichage des capsules ---
 async function afficherCapsules() {
   const container = document.getElementById("capsulesContainer");
   const querySnapshot = await getDocs(collection(db, "capsules"));
@@ -23,7 +23,7 @@ async function afficherCapsules() {
     const data = docSnap.data();
     const id = docSnap.id;
 
-    // Affichage commentaires
+    // Affichage des commentaires (correction bug [object Object])
     let commentairesHtml = "";
     if (Array.isArray(data.commentaires)) {
       commentairesHtml = data.commentaires.map(
@@ -47,18 +47,18 @@ async function afficherCapsules() {
       </div>
     `;
 
-    // --- Ici : Compter la lecture AU CHARGEMENT, une seule fois par session ---
+    // --- Ici : Incrémentation des lectures AU CHARGEMENT, une seule fois par session ---
     if (!sessionStorage.getItem('lu_' + id)) {
       updateDoc(doc(db, "capsules", id), { lectures: increment(1) });
       sessionStorage.setItem('lu_' + id, "1");
-      // Optionnel : mettre à jour l’affichage instantanément
+      // Mise à jour affichage instantanée (facultatif)
       const spanLect = document.getElementById("lect-" + id);
       if (spanLect) spanLect.textContent = (data.lectures || 0) + 1;
     }
   });
 }
 
-// Vote (ne doit pas toucher lectures !)
+// Vote sans reload (ne touche pas à lectures !)
 window.voter = async function(id, type) {
   if (!canVote(id)) return;
   const capsuleRef = doc(db, "capsules", id);
@@ -87,3 +87,35 @@ window.subscribe = function () {
 };
 
 window.onload = afficherCapsules;
+
+// Matrix pluie (ajout automatique du canvas)
+document.addEventListener("DOMContentLoaded", function() {
+  const canvas = document.createElement("canvas");
+  canvas.id = "matrixRain";
+  document.body.prepend(canvas);
+  let ctx = canvas.getContext("2d");
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  let fontSize = 16, cols = Math.floor(window.innerWidth / fontSize);
+  let drops = Array(cols).fill(1);
+  let chars = "アァイィウヴエカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロワヲンabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%&";
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px monospace";
+    ctx.fillStyle = "#00ff66";
+    for (let i = 0; i < drops.length; i++) {
+      let txt = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(txt, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.98)
+        drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 42);
+});
