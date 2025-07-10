@@ -8,37 +8,39 @@
   <script type="module" src="scripts.js"></script>
 </head>
 <body>
-  <canvas id="matrixRain"></canvas>
+  <!-- Matrix Rain (ajouté automatiquement par scripts.js) -->
   <img src="photo.jpg" alt="Rachid" class="profile-photo">
+
   <header>
-    <div class="name">ISMAILI RACHID</div>
-    <h1>ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
-    <div class="description">
+    <div class="name" style="text-align:center;">ISMAILI RACHID</div>
+    <h1 style="text-align:center;">ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
+    <div class="description" style="text-align:center;">
       RAUN est une respiration numérique, une pulsation consciente dans le réseau…
     </div>
-    <nav>
+    <nav style="text-align:center;">
       <a href="https://wa.me/212650020464" target="_blank">WhatsApp</a>
       <a href="mailto:isra1903@outlook.fr">Email</a>
       <a href="https://www.linkedin.com/in/rachid-ismaili-68b61a27" target="_blank">LinkedIn</a>
       <a href="admin.html">Admin</a>
     </nav>
-    <marquee class="message-defilant">
+    <marquee class="message-defilant" style="color:#ffb700;">
       ✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨
     </marquee>
   </header>
 
+  <!-- Carousel capsules défilement gauche/droite -->
   <div class="carousel-container">
-    <button id="prevCapsule" class="carousel-btn">⬅️</button>
+    <button onclick="capsulePrecedente()" class="carousel-btn">⬅️</button>
     <div id="carousel">
       <div id="capsulesContainer"></div>
     </div>
-    <button id="nextCapsule" class="carousel-btn">➡️</button>
+    <button onclick="capsuleSuivante()" class="carousel-btn">➡️</button>
   </div>
 
+  <!-- Abonnement -->
   <form class="subscribe-form" onsubmit="window.subscribe(); return false;">
     <input id="subscribeEmail" type="email" placeholder="Votre email" required>
     <button type="submit">S'abonner</button>
   </form>
-  <script src="matrix.js"></script>
 </body>
 </html>
