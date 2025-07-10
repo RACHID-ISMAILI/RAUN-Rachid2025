@@ -1,146 +1,61 @@
 body {
-  background: black;
-  color: #00FF41;
-  font-family: 'Fira Mono', 'Consolas', monospace;
-  margin: 0;
-  padding: 0;
+    background: black;
+    color: #00FF41;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
-
-.matrix-bg,
-.matrix-canvas {
-  position: fixed;
-  z-index: 0;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
+header, .name, .description {
+    text-align: center;
+    margin-bottom: 15px;
 }
-
-.profile-photo {
-  width: 90px;
-  border-radius: 50%;
-  margin: 10px auto 0;
-  display: block;
-  box-shadow: 0 0 30px 5px #00FF41, 0 0 0 4px #000;
+h1, h2, h3 {
+    color: #39ff14;
+    font-family: 'Fira Mono', 'Consolas', monospace;
 }
-
-header {
-  text-align: center;
-  margin-top: 10px;
-  z-index: 1;
-  position: relative;
+a {
+    color: #00ffff;
+    text-decoration: underline;
+    transition: color 0.15s;
 }
-
-.name {
-  color: #00FF41;
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-  letter-spacing: 2px;
+a:hover {
+    color: #FF41A3;
 }
-
-h1 {
-  font-size: 2rem;
-  margin-bottom: 5px;
-  letter-spacing: 2px;
+button {
+    background: black;
+    color: #00FF41;
+    border: 1px solid #00FF41;
+    font-family: inherit;
+    padding: 7px 16px;
+    font-size: 1em;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
 }
-
-.description {
-  color: #90ffb0;
-  font-size: 1rem;
-  margin-bottom: 15px;
+button:hover {
+    background: #00FF41;
+    color: black;
 }
-
-nav a {
-  color: #0cf0ff;
-  text-decoration: none;
-  margin: 0 8px;
-  font-weight: bold;
+input, textarea {
+    background: #010101;
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: inherit;
+    padding: 4px 8px;
 }
-
-nav a:hover {
-  color: #fff;
-  text-shadow: 0 0 5px #00FF41;
+marquee, .message-defilant {
+    color: #39ff14;
+    font-size: 1.15em;
+    padding: 8px 0;
+    font-weight: bold;
 }
-
-.message-defilant {
-  color: #faffc7;
-  background: transparent;
-  font-size: 1.1rem;
-  margin: 10px auto 5px;
-  width: 90%;
-}
-
-#capsulesContainer {
-  z-index: 1;
-  margin: 30px auto 0;
-  max-width: 900px;
-}
-
-.capsule {
-  border: 1px solid #00FF41;
-  border-radius: 10px;
-  margin-bottom: 25px;
-  padding: 15px;
-  background: rgba(0,0,0,0.7);
-  box-shadow: 0 0 12px #00FF41;
-}
-
-.capsule h2 {
-  color: #0cf0ff;
-  margin-bottom: 10px;
-}
-
-.capsule textarea,
-.capsule input[type="text"] {
-  width: 90%;
-  background: #222;
-  color: #00FF41;
-  border: 1px solid #00FF41;
-  padding: 5px;
-  margin-top: 8px;
-}
-
-.capsule button {
-  background: #00FF41;
-  color: #000;
-  border: none;
-  padding: 4px 14px;
-  margin-left: 5px;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.capsule button:hover {
-  background: #008f39;
-  color: #fff;
-}
-
-#subscribe {
-  text-align: center;
-  margin: 40px 0 20px 0;
-  z-index: 1;
-}
-
-#subscribe input,
-#subscribe button {
-  font-size: 1rem;
-  border: 1px solid #00FF41;
-  background: #111;
-  color: #00FF41;
-  padding: 4px 10px;
-  border-radius: 5px;
-}
-
-#subscribe button {
-  background: #00FF41;
-  color: #111;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-#subscribe button:hover {
-  background: #008f39;
-  color: #fff;
-}
+.profile {
+    display: block;
+    margin: 0 auto 10px;
+    width: 90px;
+    border-radius: 50%;
+    box-shad
