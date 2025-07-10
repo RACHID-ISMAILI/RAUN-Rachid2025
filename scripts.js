@@ -59,4 +59,60 @@ async function afficherCapsules() {
       afficherCapsules();
     };
 
-    // Zone commentaires
+    // Affichage commentaires (objet OU string)
+    let commentsHtml = '';
+    if (Array.isArray(data.commentaires) && data.commentaires.length > 0) {
+      commentsHtml = `<div class="comments-list"><b>Commentaires :</b>`;
+      data.commentaires.forEach(c => {
+        if (typeof c === 'object' && c.contenu) {
+          commentsHtml += `<div class="comment">${c.contenu}</div>`;
+        } else {
+          commentsHtml += `<div class="comment">${c}</div>`;
+        }
+      });
+      commentsHtml += `</div>`;
+    }
+
+    // Génération du HTML de la capsule
+    capsuleDiv.innerHTML = `
+      <h2>${data.titre}</h2>
+      <p>${data.contenu}</p>
+      <div id="vote-block-${id}"></div>
+      <div id="votes-${id}">Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
+      <div>Lectures : ${data.lectures || 0}</div>
+      <textarea id="comment-${id}" placeholder="Écrire un commentaire…"></textarea>
+      <button type="button" onclick="commenter('${id}')">Envoyer</button>
+      ${commentsHtml}
+    `;
+    // Ajoute les boutons de vote dans le bloc prévu
+    const voteBlock = capsuleDiv.querySelector(`#vote-block-${id}`);
+    voteBlock.appendChild(upBtn);
+    voteBlock.appendChild(downBtn);
+
+    container.appendChild(capsuleDiv);
+
+    // Compter la lecture (optionnel, désactive si tu veux pas incrémenter à chaque affichage)
+    const capsuleRef = doc(db, "capsules", id);
+    await updateDoc(capsuleRef, { lectures: increment(1) });
+  });
+}
+
+// Gère le commentaire
+window.commenter = async function (id) {
+  const textarea = document.getElementById("comment-" + id);
+  const text = textarea.value.trim();
+  if (!text) return;
+  const capsuleRef = doc(db, "capsules", id);
+
+  // On ajoute un commentaire objet {contenu, date}
+  await updateDoc(capsuleRef, {
+    commentaires: arrayUnion({
+      contenu: text,
+      date: new Date().toLocaleString()
+    })
+  });
+  textarea.value = "";
+  afficherCapsules(); // Rafraîchir la liste pour voir le nouveau commentaire
+};
+
+afficherCapsules();
