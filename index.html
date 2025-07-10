@@ -29,6 +29,15 @@
   </header>
 
   <!-- Carousel capsules défilement gauche/droite -->
+  <!-- Ajout Capsule Public NON sécurisé -->
+<div class="public-add-capsule">
+  <h2>Publier une Capsule / Article 📝</h2>
+  <input id="publicTitre" type="text" placeholder="Titre de la capsule / article" required>
+  <textarea id="publicContenu" placeholder="Contenu détaillé…"></textarea>
+  <button onclick="ajouterCapsulePublic()">Publier</button>
+  <div id="publicAjoutMsg"></div>
+</div>
+
   <div class="carousel-container">
     <button onclick="capsulePrecedente()" class="carousel-btn">⬅️</button>
     <div id="carousel">
