@@ -8,7 +8,6 @@
   <script type="module" src="scripts.js"></script>
 </head>
 <body>
-  <canvas id="matrixRain"></canvas>
   <img src="photo.jpg" alt="Rachid" class="profile-photo">
   <header>
     <div class="name">ISMAILI RACHID</div>
@@ -33,31 +32,5 @@
       <button onclick="subscribe()">S’abonner</button>
     </div>
   </main>
-  <script>
-    // Pluie Matrix
-    const canvas = document.getElementById('matrixRain');
-    const ctx = canvas.getContext('2d');
-    let w = window.innerWidth, h = window.innerHeight;
-    canvas.width = w; canvas.height = h;
-    let cols = Math.floor(w/16), drops = Array(cols).fill(1);
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0,0,0,0.18)";
-        ctx.fillRect(0,0,w,h);
-        ctx.font = "16px monospace";
-        for(let i=0;i<cols;i++) {
-            let txt = String.fromCharCode(0x30A0 + Math.random()*96);
-            ctx.fillStyle = "#00FF41";
-            ctx.fillText(txt, i*16, drops[i]*18);
-            if(drops[i]*18 > h && Math.random() > 0.975) drops[i]=0;
-            drops[i]++;
-        }
-    }
-    setInterval(drawMatrix, 41);
-    window.addEventListener("resize", ()=>{
-        w = window.innerWidth; h = window.innerHeight;
-        canvas.width = w; canvas.height = h;
-        cols = Math.floor(w/16); drops = Array(cols).fill(1);
-    });
-  </script>
 </body>
 </html>
