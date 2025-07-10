@@ -5,52 +5,72 @@ import { firebaseConfig } from "./firebase-config.js";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Limite : empêcher plusieurs votes (stocke un flag localStorage par capsule)
-function canVote(id) {
-  return !localStorage.getItem('voted_' + id);
-}
-function markVoted(id) {
-  localStorage.setItem('voted_' + id, "1");
-}
+let capsulesData = [];
+let currentCapsule = 0;
 
-// Chargement capsules + affichage
-async function afficherCapsules() {
+// Empêcher plusieurs votes
+function canVote(id) { return !localStorage.getItem('voted_' + id); }
+function markVoted(id) { localStorage.setItem('voted_' + id, "1"); }
+
+// Affichage d'une capsule à l'index donné
+function showCapsule(index) {
   const container = document.getElementById("capsulesContainer");
-  const querySnapshot = await getDocs(collection(db, "capsules"));
-  container.innerHTML = "";
-  querySnapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    const id = docSnap.id;
-
-    // Affichage des commentaires (correction bug [object Object])
-    let commentairesHtml = "";
-    if (Array.isArray(data.commentaires)) {
-      commentairesHtml = data.commentaires.map(
-        c => `<div class="comment">${typeof c === "string" ? c : (c.texte || JSON.stringify(c))}</div>`
-      ).join("");
-    }
-
-    container.innerHTML += `
-      <div class="capsule">
-        <b>${data.titre || "(Sans titre)"}</b><br>
-        <div>${data.contenu || ""}</div>
-        <div>
-          <button onclick="voter('${id}', 'up')" ${canVote(id) ? "" : "disabled"}>👍</button>
-          <button onclick="voter('${id}', 'down')" ${canVote(id) ? "" : "disabled"}>👎</button>
-        </div>
-        <div>Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
-        <div>Lectures : <span id="lect-${id}">${data.lectures || 0}</span></div>
-        <textarea id="comment-${id}" placeholder="Écrire un commentaire…"></textarea>
-        <button onclick="commenter('${id}')">Envoyer</button>
-        <div class="commentaires"><b>Commentaires :</b><br>${commentairesHtml}</div>
+  if (capsulesData.length === 0) {
+    container.innerHTML = "<i>Aucune capsule trouvée.</i>";
+    return;
+  }
+  const data = capsulesData[index];
+  const id = data.id;
+  // Affichage commentaires propre
+  let commentairesHtml = "";
+  if (Array.isArray(data.commentaires)) {
+    commentairesHtml = data.commentaires.map(
+      c => `<div class="comment">${typeof c === "string" ? c : (c.texte || JSON.stringify(c))}</div>`
+    ).join("");
+  }
+  container.innerHTML = `
+    <div class="capsule">
+      <b>${data.titre || "(Sans titre)"}</b><br>
+      <div>${data.contenu || ""}</div>
+      <div>
+        <button onclick="voter('${id}', 'up')" ${canVote(id) ? "" : "disabled"}>👍</button>
+        <button onclick="voter('${id}', 'down')" ${canVote(id) ? "" : "disabled"}>👎</button>
       </div>
-    `;
-    // Compter la lecture une seule fois par session (pas à chaque reload)
-    if (!sessionStorage.getItem('lu_' + id)) {
-      updateDoc(doc(db, "capsules", id), { lectures: increment(1) });
-      sessionStorage.setItem('lu_' + id, "1");
-    }
+      <div>Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
+      <div>Lectures : <span id="lect-${id}">${data.lectures || 0}</span></div>
+      <textarea id="comment-${id}" placeholder="Écrire un commentaire…"></textarea>
+      <button onclick="commenter('${id}')">Envoyer</button>
+      <div class="commentaires"><b>Commentaires :</b><br>${commentairesHtml}</div>
+    </div>
+  `;
+  // Lecture: incrémente une seule fois par session
+  if (!sessionStorage.getItem('lu_' + id)) {
+    updateDoc(doc(db, "capsules", id), { lectures: increment(1) });
+    sessionStorage.setItem('lu_' + id, "1");
+  }
+}
+
+// Chargement et navigation
+async function afficherCapsules() {
+  const querySnapshot = await getDocs(collection(db, "capsules"));
+  capsulesData = [];
+  querySnapshot.forEach((docSnap) => {
+    capsulesData.push({ id: docSnap.id, ...docSnap.data() });
   });
+  capsulesData.sort((a, b) => (b.date || "").localeCompare(a.date || "")); // Tri optionnel par date
+  currentCapsule = 0;
+  showCapsule(currentCapsule);
+}
+
+// Navigation boutons
+window.onload = () => {
+  afficherCapsules();
+  document.getElementById("prevCapsule").onclick = () => {
+    if (currentCapsule > 0) { currentCapsule--; showCapsule(currentCapsule);}
+  };
+  document.getElementById("nextCapsule").onclick = () => {
+    if (currentCapsule < capsulesData.length - 1) { currentCapsule++; showCapsule(currentCapsule);}
+  };
 }
 
 // Vote sans reload
@@ -60,7 +80,7 @@ window.voter = async function(id, type) {
   const field = type === "up" ? "votes_up" : "votes_down";
   await updateDoc(capsuleRef, { [field]: increment(1) });
   markVoted(id);
-  afficherCapsules(); // Recharge juste la liste
+  afficherCapsules();
 };
 
 // Commenter sans reload
@@ -76,18 +96,15 @@ window.commenter = async function(id) {
   afficherCapsules();
 };
 
+// S'abonner
 window.subscribe = function () {
   const email = document.getElementById("subscribeEmail").value.trim();
   if (email) alert("Merci pour votre abonnement : " + email);
 };
 
-window.onload = afficherCapsules;
-
-// Matrix pluie (ajout automatique du canvas)
+// Matrix pluie (canvas)
 document.addEventListener("DOMContentLoaded", function() {
-  const canvas = document.createElement("canvas");
-  canvas.id = "matrixRain";
-  document.body.prepend(canvas);
+  const canvas = document.getElementById("matrixRain");
   let ctx = canvas.getContext("2d");
   function resize() {
     canvas.width = window.innerWidth;
@@ -95,7 +112,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   resize();
   window.addEventListener("resize", resize);
-
   let fontSize = 16, cols = Math.floor(window.innerWidth / fontSize);
   let drops = Array(cols).fill(1);
   let chars = "アァイィウヴエカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロワヲンabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%&";
