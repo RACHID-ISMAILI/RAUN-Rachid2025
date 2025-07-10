@@ -2,160 +2,73 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>RAUN — Capsules de Conscience</title>
+  <title>RAUN – Capsules de Conscience</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    html, body {
-      margin: 0; padding: 0; height: 100%; width: 100%;
-      font-family: 'Consolas', 'Roboto Mono', monospace;
-      background: #000;
-      color: #00ff00;
-      min-height: 100vh;
-    }
+    html, body {margin: 0; padding: 0; background: #000; color: #00ff00;}
     #matrix-canvas {
-      position: fixed;
-      z-index: 0;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none;
-      opacity: 0.23;
+      position: fixed; z-index: 0; left:0; top:0; width: 100vw; height: 100vh;
+      pointer-events: none; opacity: 0.21;
     }
-    .main-content {
-      position: relative;
-      z-index: 1;
-    }
+    .main-content {position: relative; z-index: 1;}
     .header {
-      text-align: center;
-      margin-top: 25px;
-      margin-bottom: 12px;
-    }
-    .photo-profil {
-      width: 110px;
-      height: 110px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 5px solid #00ff00;
-      box-shadow: 0 0 45px #00ff44;
-      margin-bottom: 6px;
-      background: #0b2d0b;
+      text-align: center; margin-top: 30px; margin-bottom: 15px;
     }
     .aura {
-      display: inline-block;
-      border-radius: 50%;
+      display: inline-block; border-radius: 50%;
       box-shadow: 0 0 40px #12ff85, 0 0 80px #00ff00;
       padding: 6px;
     }
+    .photo-profil {
+      width: 110px; height: 110px; object-fit: cover;
+      border-radius: 50%; border: 5px solid #00ff00;
+      box-shadow: 0 0 45px #00ff44; margin-bottom: 6px; background: #0b2d0b;
+    }
     .nom-rachid {
-      font-size: 1.3rem;
-      letter-spacing: 0.13em;
-      margin-top: 2px;
-      color: #cfffdf;
-      text-shadow: 0 0 6px #00ffcc;
+      font-size: 1.3rem; letter-spacing: 0.13em;
+      color: #cfffdf; text-shadow: 0 0 6px #00ffcc;
     }
     h1 {
-      font-size: 2.1rem;
-      margin-bottom: 0.6em;
-      margin-top: 0.1em;
-      letter-spacing: 0.08em;
-      color: #00ffb3;
+      font-size: 2.1rem; margin-bottom: 0.6em; margin-top: 0.1em;
+      letter-spacing: 0.08em; color: #00ffb3;
       text-shadow: 0 0 6px #00ffc3;
     }
     .slogan {
-      font-size: 1.12rem;
-      margin-bottom: 1.1em;
-      color: #fffad6;
-      text-shadow: 0 0 16px #ffbb0066;
-      font-weight: bold;
+      font-size: 1.12rem; margin-bottom: 1.1em; color: #fffad6;
+      text-shadow: 0 0 16px #ffbb0066; font-weight: bold;
     }
-    .links {
-      margin-bottom: 16px;
-    }
+    .links {margin-bottom: 18px;}
     .links a {
-      color: #00eaff;
-      text-decoration: underline;
-      margin: 0 11px;
-      font-size: 1.13rem;
-      font-weight: bold;
-      transition: color 0.2s;
+      color: #00eaff; text-decoration: underline; margin: 0 11px;
+      font-size: 1.13rem; font-weight: bold; transition: color 0.2s;
     }
     .links a:hover { color: #fff; }
     #capsule-slider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       margin: 34px 0 10px 0;
     }
     .matrix-btn {
-      background: none;
-      border: none;
-      color: #00ff00;
-      font-size: 2.6rem;
-      cursor: pointer;
+      background: none; border: none; color: #00ff00;
+      font-size: 2.6rem; cursor: pointer;
       transition: text-shadow 0.3s, color 0.3s;
       text-shadow: 0 0 8px #00ff00, 0 0 18px #00ff00;
-      outline: none;
-      padding: 0 18px;
-      user-select: none;
+      outline: none; padding: 0 18px; user-select: none;
     }
     .matrix-btn:hover {
-      color: #fff;
-      text-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00;
+      color: #fff; text-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00;
     }
     #capsule-content {
-      min-width: 350px;
-      max-width: 650px;
-      min-height: 130px;
-      transition: opacity 0.4s;
-      color: #fff;
-      background: rgba(15,40,15,0.94);
-      border-radius: 18px;
-      box-shadow: 0 0 30px #00ff44;
-      margin: 0 18px;
-      padding: 28px 30px 20px 30px;
-      font-size: 1.13rem;
-      position: relative;
+      min-width: 340px; max-width: 650px; min-height: 130px;
+      color: #fff; background: rgba(15,40,15,0.96);
+      border-radius: 18px; box-shadow: 0 0 30px #00ff44;
+      margin: 0 18px; padding: 24px 26px 20px 26px; font-size: 1.13rem;
+      position: relative; transition: opacity 0.4s;
     }
     .fade { opacity: 1; transition: opacity 0.4s;}
-    .fade-out { opacity: 0; }
+    .fade-out { opacity: 0;}
     #capsule-index {
-      color: #00ffb3;
-      font-size: 1.08rem;
-      text-align: center;
-      margin-top: 7px;
+      color: #00ffb3; font-size: 1.08rem; text-align: center; margin-top: 7px;
     }
-    .votes {
-      margin-top: 12px;
-      margin-bottom: 2px;
-      font-size: 1.18em;
-      color: #00ffb3;
-    }
-    .votes .matrix-btn { font-size: 1.3em; padding: 0 8px;}
-    .lectures { font-size:1em; color:#00fcd4;}
-    .comments-block {
-      margin-top: 14px;
-      background: rgba(10,40,20,0.60);
-      border-radius: 12px;
-      padding: 12px 8px 8px 8px;
-    }
-    .comments-block input {
-      background: #000;
-      color: #0f0;
-      border: 1px solid #00ff00;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 1em;
-      margin-bottom: 7px;
-    }
-    .comments-block button {
-      background: #020;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      border-radius: 6px;
-      margin-left: 8px;
-      padding: 3px 15px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    .comment { margin-bottom: 6px; color: #b5ffdf; }
     @media (max-width: 600px) {
       #capsule-content { min-width:0; max-width:96vw; padding: 10px 7vw;}
       .matrix-btn { font-size:2.1rem; padding:0 8px;}
@@ -180,7 +93,6 @@
     </div>
     <div class="slogan">✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨</div>
   </div>
-
   <!-- Slider Capsules -->
   <div id="capsule-slider">
     <button id="prev-capsule" class="matrix-btn" title="Capsule précédente">←</button>
@@ -189,27 +101,20 @@
   </div>
   <div id="capsule-index"></div>
 </div>
-
 <script type="module">
 // ========== MATRIX RAIN CANVAS ==============
 function matrixRain() {
   const canvas = document.getElementById('matrix-canvas');
   const ctx = canvas.getContext('2d');
-  // Set canvas to window size
   function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
   }
-  resize();
-  window.addEventListener('resize', resize);
-
+  resize(); window.addEventListener('resize', resize);
   const letters = "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   const fontSize = 22;
   const columns = Math.floor(canvas.width / fontSize) + 1;
   let drops = [];
-  for (let x = 0; x < columns; x++)
-    drops[x] = 1;
-
+  for (let x = 0; x < columns; x++) drops[x] = 1;
   function draw() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.09)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -242,11 +147,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ----- LOGIQUE CAPSULES RAUN (préservée depuis ton code) -----
 let capsules = [];
 let currentIndex = 0;
-let capsulesIds = []; // Pour votes/commentaires Firestore
+let capsulesIds = [];
 
-// Affiche la capsule + votes/commentaires/lectures
+// Affiche la capsule courante + votes, commentaires, lectures
 function showCapsule(index) {
   const capsule = capsules[index];
   const capsuleId = capsulesIds[index];
@@ -257,29 +163,31 @@ function showCapsule(index) {
     capsuleContent.innerHTML = `
       <strong style="color:#00ffb3">${capsule.titre || ''}</strong><br><br>
       ${capsule.contenu || ''}
-      <div class="votes">
-        <button onclick="window.voteCapsule(${index}, 'up')" class="matrix-btn" title="J'aime">👍</button>
-        <span id="votes-up">${capsule.votes_up||0}</span>
-        <button onclick="window.voteCapsule(${index}, 'down')" class="matrix-btn" title="Je n'aime pas">👎</button>
-        <span id="votes-down">${capsule.votes_down||0}</span>
-        <span class="lectures">&nbsp;•&nbsp; Lectures: <span id="lecture-count">${capsule.lectures||0}</span></span>
+      <div style="margin:14px 0 2px 0;">
+        <span style="font-size:1.2em;vertical-align:middle;">
+          <button onclick="window.voteCapsule(${index}, 'up')" class="matrix-btn" title="J'aime">👍</button>
+          <span id="votes-up">${capsule.votes_up||0}</span>
+          <button onclick="window.voteCapsule(${index}, 'down')" class="matrix-btn" title="Je n'aime pas">👎</button>
+          <span id="votes-down">${capsule.votes_down||0}</span>
+        </span>
+        &nbsp;•&nbsp; Lectures : <span id="lecture-count">${capsule.lectures||0}</span>
       </div>
-      <div class="comments-block">
+      <hr>
+      <div>
         <b>Commentaires :</b>
         <div id="commentaires">
-          ${(capsule.commentaires||[]).map(c=>`<div class="comment">${c}</div>`).join('')}
+          ${(capsule.commentaires||[]).map(c=>`<div style="margin-bottom:5px;">${c}</div>`).join('')}
         </div>
-        <input id="new-comment" placeholder="Écrire un commentaire..." maxlength="180">
-        <button onclick="window.addComment(${index})">Envoyer</button>
+        <input id="new-comment" placeholder="Écrire un commentaire..." style="width:80%;">
+        <button onclick="window.addComment(${index})" class="matrix-btn">Envoyer</button>
       </div>
     `;
     capsuleContent.classList.remove('fade-out');
   }, 270);
   document.getElementById('capsule-index').textContent = `Capsule ${index+1} / ${capsules.length}`;
-  // Incrémente la lecture si on arrive sur la capsule (peut être affiné)
+  // Incrémente la lecture (à adapter selon la logique anti-refresh)
   if (!capsule._alreadyViewed) {
     capsule._alreadyViewed = true;
-    const capsuleId = capsulesIds[index];
     if (capsuleId) {
       const docRef = doc(db, "capsules", capsuleId);
       updateDoc(docRef, { lectures: increment(1) });
@@ -287,8 +195,7 @@ function showCapsule(index) {
     }
   }
 }
-
-// Navigation capsules
+// Slider gauche/droite
 document.getElementById('prev-capsule').onclick = function() {
   if (currentIndex > 0) {
     currentIndex--;
@@ -301,12 +208,10 @@ document.getElementById('next-capsule').onclick = function() {
     showCapsule(currentIndex);
   }
 };
-// Navigation clavier
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') document.getElementById('prev-capsule').click();
   if (e.key === 'ArrowRight') document.getElementById('next-capsule').click();
 });
-
 // VOTES (👍👎)
 window.voteCapsule = async function(index, type) {
   const capsuleId = capsulesIds[index];
@@ -317,7 +222,6 @@ window.voteCapsule = async function(index, type) {
   capsules[index][field] = (capsules[index][field]||0)+1;
   showCapsule(index);
 }
-
 // COMMENTAIRES
 window.addComment = async function(index) {
   const val = document.getElementById('new-comment').value.trim();
@@ -331,8 +235,7 @@ window.addComment = async function(index) {
   document.getElementById('new-comment').value = '';
   showCapsule(index);
 }
-
-// Chargement des capsules Firestore
+// Chargement capsules Firestore
 async function chargerCapsules() {
   const querySnapshot = await getDocs(collection(db, "capsules"));
   capsules = [];
@@ -342,12 +245,10 @@ async function chargerCapsules() {
     capsulesIds.push(docu.id);
   });
   currentIndex = 0;
-  // Efface le flag lectures locales
   capsules.forEach(c=>delete c._alreadyViewed);
   showCapsule(currentIndex);
 }
 chargerCapsules();
-
 </script>
 </body>
 </html>
