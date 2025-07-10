@@ -15,6 +15,8 @@
   </style>
 </head>
 <body>
+  <canvas id="matrixRain"></canvas>
+  <img src="photo.jpg" alt="Rachid" class="profile-photo">
   <a href="index.html" style="color:#00ffff;">← Retour à la page publique</a>
   <div class="login-box" id="loginBox">
     <h2>Connexion Admin <span style="font-size:1.5em;">🔐</span></h2>
@@ -26,68 +28,40 @@
 
   <div id="adminPanel" style="display:none;">
     <h2>Capsules (Gestion Admin)</h2>
+    <form id="addCapsuleForm">
+      <input type="text" id="titre" placeholder="Titre" required><br><br>
+      <textarea id="contenu" placeholder="Contenu" required></textarea><br>
+      <button type="submit">Ajouter la capsule</button>
+    </form>
     <div id="capsulesList"></div>
     <button onclick="logoutAdmin()">Déconnexion</button>
   </div>
-  
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-    import { firebaseConfig } from "./firebase-config.js";
 
-    // Auth minimal (mot de passe unique "raun2025" par exemple)
-    const ADMIN_EMAIL = "admin@raun.com";
-    const ADMIN_PASS = "raun2025";
-
-    // Admin "connexion"
-    window.loginAdmin = function() {
-      const email = document.getElementById('adminEmail').value.trim();
-      const pass = document.getElementById('adminPassword').value.trim();
-      if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-        document.getElementById('loginBox').style.display = 'none';
-        document.getElementById('adminPanel').style.display = '';
-        loadCapsulesAdmin();
-      } else {
-        document.getElementById('loginError').innerText = "Identifiants invalides !";
-      }
-    };
-
-    window.logoutAdmin = function() {
-      document.getElementById('adminPanel').style.display = 'none';
-      document.getElementById('loginBox').style.display = '';
-    };
-
-    // Admin: affichage et suppression des capsules
-    async function loadCapsulesAdmin() {
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-      const capsulesList = document.getElementById("capsulesList");
-      capsulesList.innerHTML = "Chargement…";
-      const querySnapshot = await getDocs(collection(db, "capsules"));
-      let html = "";
-      querySnapshot.forEach(docSnap => {
-        const d = docSnap.data();
-        html += `
-          <div class="capsule-admin">
-            <b>${d.titre || '(Sans titre)'}</b><br>
-            <small>${d.contenu || ''}</small><br>
-            Votes: ${d.votes_up || 0} 👍 / ${d.votes_down || 0} 👎 — Lectures: ${d.lectures || 0}<br>
-            <button onclick="deleteCapsule('${docSnap.id}')">🗑️ Supprimer</button>
-          </div>
-        `;
-      });
-      capsulesList.innerHTML = html || "<i>Aucune capsule.</i>";
+  <script>
+    // Matrix Rain
+    const canvas = document.getElementById('matrixRain');
+    const ctx = canvas.getContext('2d');
+    let w = window.innerWidth, h = window.innerHeight;
+    canvas.width = w; canvas.height = h;
+    let cols = Math.floor(w/16), drops = Array(cols).fill(1);
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0,0,0,0.18)";
+        ctx.fillRect(0,0,w,h);
+        ctx.font = "16px monospace";
+        for(let i=0;i<cols;i++) {
+            let txt = String.fromCharCode(0x30A0 + Math.random()*96);
+            ctx.fillStyle = "#00FF41";
+            ctx.fillText(txt, i*16, drops[i]*18);
+            if(drops[i]*18 > h && Math.random() > 0.975) drops[i]=0;
+            drops[i]++;
+        }
     }
-
-    // Suppression
-    window.deleteCapsule = async function(id) {
-      if (confirm("Supprimer définitivement cette capsule ?")) {
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        await deleteDoc(doc(db, "capsules", id));
-        loadCapsulesAdmin();
-      }
-    };
+    setInterval(drawMatrix, 41);
+    window.addEventListener("resize", ()=>{
+        w = window.innerWidth; h = window.innerHeight;
+        canvas.width = w; canvas.height = h;
+        cols = Math.floor(w/16); drops = Array(cols).fill(1);
+    });
   </script>
 </body>
 </html>
