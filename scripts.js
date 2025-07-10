@@ -54,4 +54,64 @@ async function afficherCapsules() {
   });
 }
 
-// Vote sans reloa
+// Vote sans reload
+window.voter = async function(id, type) {
+  if (!canVote(id)) return;
+  const capsuleRef = doc(db, "capsules", id);
+  const field = type === "up" ? "votes_up" : "votes_down";
+  await updateDoc(capsuleRef, { [field]: increment(1) });
+  markVoted(id);
+  afficherCapsules(); // Recharge juste la liste
+};
+
+// Commenter sans reload
+window.commenter = async function(id) {
+  const textarea = document.getElementById("comment-" + id);
+  const text = textarea.value.trim();
+  if (!text) return;
+  const capsuleRef = doc(db, "capsules", id);
+  await updateDoc(capsuleRef, {
+    commentaires: arrayUnion({ texte: text, date: new Date().toISOString() })
+  });
+  textarea.value = "";
+  afficherCapsules();
+};
+
+window.subscribe = function () {
+  const email = document.getElementById("subscribeEmail").value.trim();
+  if (email) alert("Merci pour votre abonnement : " + email);
+};
+
+window.onload = afficherCapsules;
+
+// Matrix pluie (ajout automatique du canvas)
+document.addEventListener("DOMContentLoaded", function() {
+  const canvas = document.createElement("canvas");
+  canvas.id = "matrixRain";
+  document.body.prepend(canvas);
+  let ctx = canvas.getContext("2d");
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  let fontSize = 16, cols = Math.floor(window.innerWidth / fontSize);
+  let drops = Array(cols).fill(1);
+  let chars = "アァイィウヴエカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロワヲンabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%&";
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px monospace";
+    ctx.fillStyle = "#00ff66";
+    for (let i = 0; i < drops.length; i++) {
+      let txt = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(txt, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.98)
+        drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 42);
+});
