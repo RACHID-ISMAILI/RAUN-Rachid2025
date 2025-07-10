@@ -1,35 +1,68 @@
-
 body {
-  background-color: black;
-  color: lime;
-  font-family: monospace;
-  padding: 20px;
+  background: #000;
+  color: #00ff44;
+  font-family: monospace, monospace;
+  margin: 0;
+  padding: 0;
 }
+
+header, main {
+  width: 95%;
+  margin: auto;
+}
+
 header {
   text-align: center;
-}
-.profile {
-  width: 100px;
-  border-radius: 50%;
-}
-.name {
-  font-size: 1.5rem;
   margin-top: 10px;
+  margin-bottom: 25px;
 }
+
+.name {
+  color: #00ff44;
+  font-size: 2em;
+  margin-top: 10px;
+  letter-spacing: 2px;
+}
+
 .description {
+  color: #88ffcc;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+}
+
+nav a {
+  color: #00aaff;
+  margin: 0 8px;
+  text-decoration: underline;
+}
+
+.message-defilant {
+  color: #aaffaa;
+  font-size: 1.1em;
+  margin: 10px 0;
+}
+
+.capsule {
+  border: 1px solid #00ff44;
+  border-radius: 12px;
+  margin: 18px 0;
+  padding: 18px;
+  background: rgba(0, 30, 0, 0.16);
+  box-shadow: 0 0 12px #00440055;
+}
+
+.capsule h2 {
+  color: #66ff99;
+  font-size: 1.4em;
+  margin-bottom: 5px;
+}
+
+.capsule p {
+  color: #baffd0;
   margin-bottom: 10px;
 }
-.message-defilant {
-  margin: 10px 0;
-  font-weight: bold;
-}
-button, input, textarea {
-  background-color: black;
-  color: lime;
-  border: 1px solid lime;
-  padding: 5px;
-  margin-top: 5px;
-}
-textarea {
-  width: 100%;
-}
+
+button {
+  background: #000;
+  color: #00ff44;
+  border: 1px solid
