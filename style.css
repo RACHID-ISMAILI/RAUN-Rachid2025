@@ -1,141 +1,127 @@
 body {
-  background: black;
-  color: #00ff41;
-  font-family: monospace;
+  background: #020c02;
+  color: #00ff99;
+  font-family: monospace, monospace;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 #matrixRain {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.22;
-}
-
-header, main {
-  position: relative;
-  z-index: 1;
 }
 
 .profile-photo {
-  display: block;
-  margin: 24px auto 8px auto;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  box-shadow: 0 0 24px 4px #00ff41;
-  border: 2px solid #00ff41;
-  background: #222;
+  width: 90px; height: 90px; object-fit: cover;
+  border-radius: 50%; box-shadow: 0 0 36px #16ff16;
+  display: block; margin: 16px auto 2px auto; z-index: 1;
+  border: 3px solid #33ff33;
+}
+
+header, nav, main {
+  position: relative;
+  z-index: 2;
 }
 
 .name {
   text-align: center;
-  margin: 0 0 10px 0;
-  font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+  color: #16ff16;
   letter-spacing: 2px;
 }
 
 h1 {
   text-align: center;
-  color: #25ff8a;
-  margin-bottom: 8px;
-  font-size: 1.6em;
+  color: #31ff7a;
+  font-size: 2.2rem;
+  margin: 6px 0 10px 0;
+  letter-spacing: 4px;
 }
 
-.description {
+.description, nav {
   text-align: center;
-  color: #70ffb6;
-  margin-bottom: 10px;
-  font-size: 1em;
+  margin-bottom: 9px;
+  color: #7fffaf;
 }
 
-nav {
-  text-align: center;
-  margin-bottom: 8px;
-}
 nav a {
-  color: #00ffff;
-  text-decoration: underline;
+  color: #00f6ff;
   margin: 0 8px;
+  text-decoration: none;
+  font-size: 1.06rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+nav a:hover {
+  color: #faff8a;
 }
 
 .message-defilant {
-  color: #b8ffae;
+  display: block;
+  color: #ffffbb;
+  margin: 8px auto;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 1.08rem;
+  background: transparent;
 }
 
-#capsulesContainer {
-  margin: 40px auto 10px auto;
-  max-width: 800px;
-}
-
-.capsule-block {
-  background: rgba(10,32,10,0.65);
-  border: 1px solid #00ff41;
-  border-radius: 10px;
+.capsule {
+  border: 1.5px solid #16ff16;
+  border-radius: 12px;
+  background: rgba(0, 32, 8, 0.91);
   padding: 12px;
-  margin-bottom: 22px;
+  margin: 18px auto;
+  max-width: 640px;
+  min-width: 260px;
+  box-shadow: 0 0 14px #10ff60;
+  position: relative;
 }
 
-.capsule-block h2 {
-  margin: 0 0 8px 0;
-  color: #70ffb6;
-  font-size: 1.18em;
+.capsule button, input, textarea {
+  background: black; color: #16ff16;
+  border: 1px solid #33ff33;
+  font-family: inherit; font-size: 1rem;
+  border-radius: 7px; padding: 3.5px 10px;
+  margin: 2px 0;
+}
+.capsule button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+textarea {
+  width: 65%; min-height: 38px; resize: vertical;
+  margin: 4px 0 0 0;
 }
 
-.capsule-block p {
-  margin: 0 0 5px 0;
-  color: #fff;
+.commentaires {
+  margin: 5px 0 2px 0;
+  color: #9affdc;
+  font-size: 0.98rem;
 }
-
-.capsule-block textarea,
-.capsule-block input,
-.capsule-block button {
-  background: black;
-  color: #00ff41;
-  border: 1px solid #00ff41;
-  border-radius: 8px;
-  padding: 4px 7px;
-  font-family: monospace;
-  font-size: 1em;
-  margin-top: 3px;
-}
-
-.capsule-block button {
-  cursor: pointer;
-}
-
-.capsule-block .votes {
-  margin-bottom: 4px;
-}
-.capsule-block .lectures {
-  font-size: 0.95em;
-  margin-bottom: 4px;
-}
-.capsule-block .commentaires {
-  margin-top: 6px;
-  font-size: 0.99em;
-  color: #00fff2;
+.comment {
+  margin-left: 8px; padding-left: 2px; border-left: 2px solid #10ff99;
+  color: #aff;
 }
 
 #subscribe {
-  margin: 40px auto 24px auto;
-  text-align: center;
+  text-align: center; margin: 26px auto 10px auto;
 }
-#subscribe input, #subscribe button {
-  margin-top: 10px;
-  background: black;
-  color: #00ff41;
-  border: 1px solid #00ff41;
-  border-radius: 7px;
-  padding: 7px 13px;
-  font-size: 1.1em;
+#subscribe input[type="email"] {
+  width: 160px;
 }
 #subscribe button {
+  margin-left: 10px;
+  background: black;
+  border: 1.5px solid #00ff99;
+  color: #8fffdf;
+  font-weight: bold;
   cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .capsule { max-width: 97vw; font-size: 1.02rem; }
+  h1 { font-size: 1.15rem; }
+  .profile-photo { width: 55px; height: 55px; }
 }
