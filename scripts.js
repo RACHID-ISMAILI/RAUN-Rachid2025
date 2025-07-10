@@ -1,3 +1,4 @@
+// scripts.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
@@ -5,65 +6,112 @@ import { firebaseConfig } from "./firebase-config.js";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.subscribe = function () {
-  const email = document.getElementById("subscribeEmail").value.trim();
-  if (email) alert("Merci pour votre abonnement : " + email);
-};
+// Limite : empêcher plusieurs votes (stocke un flag localStorage par capsule)
+function canVote(id) {
+  return !localStorage.getItem('voted_' + id);
+}
+function markVoted(id) {
+  localStorage.setItem('voted_' + id, "1");
+}
 
+// Chargement capsules + affichage
 async function afficherCapsules() {
   const container = document.getElementById("capsulesContainer");
   const querySnapshot = await getDocs(collection(db, "capsules"));
   container.innerHTML = "";
-  querySnapshot.forEach(async (docSnap) => {
+  querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
-    const capsuleDiv = document.createElement("div");
-    capsuleDiv.className = "capsule-block";
-    capsuleDiv.innerHTML = `
-      <h2>${data.titre || "(Sans titre)"}</h2>
-      <p>${data.contenu || ""}</p>
-      <div class="votes">
-        <button onclick="voter('${docSnap.id}', 'up')">👍</button>
-        <button onclick="voter('${docSnap.id}', 'down')">👎</button>
-        Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎
+    const id = docSnap.id;
+
+    // Affichage des commentaires (correction bug [object Object])
+    let commentairesHtml = "";
+    if (Array.isArray(data.commentaires)) {
+      commentairesHtml = data.commentaires.map(
+        c => `<div class="comment">${typeof c === "string" ? c : (c.texte || JSON.stringify(c))}</div>`
+      ).join("");
+    }
+
+    container.innerHTML += `
+      <div class="capsule">
+        <b>${data.titre || "(Sans titre)"}</b><br>
+        <div>${data.contenu || ""}</div>
+        <div>
+          <button onclick="voter('${id}', 'up')" ${canVote(id) ? "" : "disabled"}>👍</button>
+          <button onclick="voter('${id}', 'down')" ${canVote(id) ? "" : "disabled"}>👎</button>
+        </div>
+        <div>Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
+        <div>Lectures : <span id="lect-${id}">${data.lectures || 0}</span></div>
+        <textarea id="comment-${id}" placeholder="Écrire un commentaire…"></textarea>
+        <button onclick="commenter('${id}')">Envoyer</button>
+        <div class="commentaires"><b>Commentaires :</b><br>${commentairesHtml}</div>
       </div>
-      <div class="lectures">Lectures : ${data.lectures || 0}</div>
-      <textarea id="comment-${docSnap.id}" placeholder="Écrire un commentaire…"></textarea>
-      <button onclick="commenter('${docSnap.id}')">Envoyer</button>
-      <div class="commentaires" id="comments-${docSnap.id}"></div>
     `;
-    container.appendChild(capsuleDiv);
-
-    // Ajout lecture
-    const capsuleRef = doc(db, "capsules", docSnap.id);
-    await updateDoc(capsuleRef, { lectures: increment(1) });
-
-    // Afficher commentaires si présents
-    if (data.commentaires && Array.isArray(data.commentaires)) {
-      document.getElementById(`comments-${docSnap.id}`).innerHTML =
-        "<b>Commentaires :</b><br>" +
-        data.commentaires.map(c => `<span>— ${c}</span>`).join("<br>");
+    // Compter la lecture une seule fois par session (pas à chaque reload)
+    if (!sessionStorage.getItem('lu_' + id)) {
+      updateDoc(doc(db, "capsules", id), { lectures: increment(1) });
+      sessionStorage.setItem('lu_' + id, "1");
     }
   });
 }
 
-window.voter = async function (id, type) {
+// Vote sans reload
+window.voter = async function(id, type) {
+  if (!canVote(id)) return;
   const capsuleRef = doc(db, "capsules", id);
   const field = type === "up" ? "votes_up" : "votes_down";
   await updateDoc(capsuleRef, { [field]: increment(1) });
-  location.reload();
+  markVoted(id);
+  afficherCapsules(); // Recharge juste la liste
 };
 
-window.commenter = async function (id) {
+// Commenter sans reload
+window.commenter = async function(id) {
   const textarea = document.getElementById("comment-" + id);
   const text = textarea.value.trim();
   if (!text) return;
   const capsuleRef = doc(db, "capsules", id);
   await updateDoc(capsuleRef, {
-    commentaires: arrayUnion(text)
+    commentaires: arrayUnion({ texte: text, date: new Date().toISOString() })
   });
-  alert("Commentaire ajouté.");
   textarea.value = "";
-  location.reload();
+  afficherCapsules();
 };
 
-afficherCapsules();
+window.subscribe = function () {
+  const email = document.getElementById("subscribeEmail").value.trim();
+  if (email) alert("Merci pour votre abonnement : " + email);
+};
+
+window.onload = afficherCapsules;
+
+// Matrix pluie
+document.addEventListener("DOMContentLoaded", function() {
+  const canvas = document.createElement("canvas");
+  canvas.id = "matrixRain";
+  document.body.prepend(canvas);
+  let ctx = canvas.getContext("2d");
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  let fontSize = 16, cols = Math.floor(window.innerWidth / fontSize);
+  let drops = Array(cols).fill(1);
+  let chars = "アァイィウヴエカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロワヲンabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%&";
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px monospace";
+    ctx.fillStyle = "#00ff66";
+    for (let i = 0; i < drops.length; i++) {
+      let txt = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(txt, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.98)
+        drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 42);
+});
