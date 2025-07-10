@@ -1,46 +1,197 @@
 body {
+  background: #000 !important;
+  color: #00ff66;
+  font-family: 'Fira Mono', 'Consolas', monospace;
   margin: 0;
-  background: black;
-  color: #33ff33;
-  font-family: monospace;
-}
-.profile-photo {
-  width: 110px; height: 110px;
-  display: block;
-  margin: 18px auto 6px auto;
-  border-radius: 50%;
-  box-shadow: 0 0 32px 7px #00ff99;
+  min-height: 100vh;
   position: relative;
+  z-index: 0;
+}
+
+canvas#matrixRain {
+  position: fixed;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.profile-photo {
+  display: block;
+  margin: 28px auto 12px auto;
+  border-radius: 50%;
+  width: 110px;
+  border: 4px solid #00ff99;
+  box-shadow: 0 0 36px #00ff66;
+  background: #111;
+  z-index: 1;
+  position: relative;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 12px;
+  z-index: 1;
+  position: relative;
+}
+header h1 {
+  font-size: 1.85em;
+  margin: 6px 0 10px 0;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #b7ffcd;
+}
+header .name {
+  font-size: 1.25em;
+  color: #00ff99;
+  margin-bottom: 4px;
+}
+header .description {
+  font-size: 1.11em;
+  color: #caffdd;
+  margin-bottom: 12px;
+}
+header nav a {
+  color: #00ff99;
+  text-decoration: none;
+  margin: 0 14px;
+  font-size: 1.13em;
+  transition: color 0.2s;
+}
+header nav a:hover {
+  color: #fff800;
+  text-shadow: 0 0 5px #00ff66;
+}
+marquee.message-defilant {
+  margin-top: 9px;
+  font-size: 1.09em;
+  color: #ffea2b;
+  letter-spacing: 1px;
+  background: rgba(12, 24, 12, 0.58);
+  padding: 5px 0;
+  border-radius: 12px;
+}
+
+/* Carousel et capsules */
+.carousel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 34px 0 8px 0;
+  gap: 14px;
   z-index: 2;
 }
-header { text-align: center; position: relative; z-index: 3;}
-.name { font-size: 1.3rem; color: #33ff99; letter-spacing: 2px; margin-top: 4px;}
-h1 { font-size: 2rem; color: #33ff66; margin: 4px 0 8px 0; }
-.description { color: #80ffcc; font-size: 1.1rem; margin-bottom: 10px; }
-nav a { color: #00ffff; margin: 0 8px; text-decoration: underline;}
-.message-defilant { color: #ffcc66; font-size: 1.08rem; }
-.carousel-container { display: flex; justify-content: center; align-items: center; margin: 15px 0; }
-.carousel-btn { background: transparent; color: #00ff99; font-size: 2.2rem; border: none; cursor: pointer; z-index: 4;}
-#carousel { width: 700px; min-height: 350px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-#capsulesContainer { width: 100%; z-index: 4;}
+.carousel-btn {
+  font-size: 2.5em;
+  background: transparent;
+  color: #00ff66;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s;
+  padding: 0 17px;
+  z-index: 2;
+}
+.carousel-btn:active { transform: scale(1.17); }
+#carousel { min-width: 340px; max-width: 780px; width: 100%; z-index:2; }
+
+/* Capsule affichée (public) */
 .capsule {
-  background: rgba(0,30,0,0.85);
-  border: 2px solid #00ff66;
-  border-radius: 18px;
-  margin: 12px auto; padding: 18px 20px;
-  color: #ccffcc;
-  box-shadow: 0 0 12px 2px #0f0a;
-  min-width: 300px;
-  max-width: 600px;
-  z-index: 4;
+  margin: 32px auto 32px auto;
+  max-width: 760px;
+  padding: 38px 38px 34px 38px;
+  border-radius: 20px;
+  border: 2.5px solid #1aff63;
+  background: rgba(8, 25, 8, 0.95);
+  box-shadow: 0 0 30px #15e03e77;
+  font-size: 1.25em;
+  z-index: 3;
+  position: relative;
 }
-textarea, input[type="email"] {
-  background: #0f2a1a; color: #afffaf; border: 1px solid #33ff33;
-  font-family: monospace; font-size: 1rem; border-radius: 8px; padding: 7px;
+.capsule b {
+  font-size: 1.24em;
+  color: #0fff9a;
 }
-button { background: black; color: #33ff33; border: 1px solid #33ff33; border-radius: 8px; padding: 6px 12px; font-size: 1rem; margin-left: 4px; }
-.subscribe-form { margin: 18px auto; display: flex; justify-content: center; gap: 6px; }
-.commentaires { margin-top: 8px; }
-.comment { background: #111; color: #b2ffba; padding: 3px 7px; border-radius: 7px; margin: 2px 0; font-size: 0.97rem;}
-/* Mettre le canvas Matrix tout au fond */
-#matrixRain { position: fixed; top: 0; left: 0; z-index: 0; width: 100vw; height: 100vh; pointer-events: none; }
+.capsule-content {
+  font-size: 1.22em;
+  line-height: 1.6;
+  margin: 16px 0 20px 0;
+  color: #e0ffe6;
+  word-break: break-word;
+}
+
+/* Commentaires */
+.capsule textarea {
+  width: 100%;
+  min-height: 38px;
+  font-size: 1.06em;
+  margin-top: 13px;
+  margin-bottom: 8px;
+  background: #061b08;
+  color: #aaffcc;
+  border-radius: 8px;
+  border: 1px solid #33ff33;
+  padding: 7px 10px;
+  resize: vertical;
+}
+.capsule .commentaires {
+  margin-top: 12px;
+  font-size: 0.99em;
+  color: #7cfbb1;
+}
+.capsule .comment {
+  background: #0e1c13;
+  border-radius: 7px;
+  margin: 5px 0;
+  padding: 5px 11px;
+  color: #f7ffe7;
+}
+
+/* Abonnement */
+.subscribe-form {
+  margin: 32px auto 12px auto;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+.subscribe-form input[type="email"] {
+  font-size: 1.13em;
+  padding: 7px 14px;
+  border-radius: 9px;
+  border: 1.5px solid #00ff66;
+  background: #071a0a;
+  color: #aaffcc;
+  width: 240px;
+  margin-right: 9px;
+}
+.subscribe-form button {
+  background: #00ff66;
+  color: #222;
+  font-size: 1.14em;
+  font-weight: 600;
+  border-radius: 9px;
+  border: none;
+  padding: 8px 22px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.subscribe-form button:hover {
+  background: #111;
+  color: #00ff66;
+  border: 1.2px solid #00ff66;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .capsule, .admin-box {
+    max-width: 98vw;
+    padding-left: 7vw;
+    padding-right: 7vw;
+  }
+}
+@media (max-width: 600px) {
+  .capsule, .admin-box {
+    padding: 7vw 3vw;
+    font-size: 1em;
+  }
+  .carousel-container { flex-direction: column; gap: 0; }
+}
