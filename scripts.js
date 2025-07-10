@@ -10,71 +10,60 @@ window.subscribe = function () {
   if (email) alert("Merci pour votre abonnement : " + email);
 };
 
-// Pour limiter à 1 vote par visiteur (simple, par LocalStorage)
-function hasVoted(id) {
-  const votes = JSON.parse(localStorage.getItem("votes") || "{}");
-  return votes[id];
-}
-function setVoted(id) {
-  const votes = JSON.parse(localStorage.getItem("votes") || "{}");
-  votes[id] = true;
-  localStorage.setItem("votes", JSON.stringify(votes));
-}
-
 async function afficherCapsules() {
   const container = document.getElementById("capsulesContainer");
   const querySnapshot = await getDocs(collection(db, "capsules"));
   container.innerHTML = "";
   querySnapshot.forEach(async (docSnap) => {
     const data = docSnap.data();
-    const capsuleId = docSnap.id;
-    // Incrémente lectures une seule fois par affichage (évite l'abus via LocalStorage)
-    if (!localStorage.getItem("read-" + capsuleId)) {
-      const capsuleRef = doc(db, "capsules", capsuleId);
-      await updateDoc(capsuleRef, { lectures: increment(1) });
-      localStorage.setItem("read-" + capsuleId, "1");
-    }
-
-    // Création du bloc capsule
     const capsuleDiv = document.createElement("div");
-    capsuleDiv.className = "capsule";
+    capsuleDiv.className = "capsule-block";
     capsuleDiv.innerHTML = `
-      <h2>${data.titre || ''}</h2>
-      <p>${data.contenu || ''}</p>
-      <div>
-        <button onclick="voter('${capsuleId}', 'up')" ${hasVoted(capsuleId) ? "disabled" : ""}>👍</button>
-        <button onclick="voter('${capsuleId}', 'down')" ${hasVoted(capsuleId) ? "disabled" : ""}>👎</button>
+      <h2>${data.titre || "(Sans titre)"}</h2>
+      <p>${data.contenu || ""}</p>
+      <div class="votes">
+        <button onclick="voter('${docSnap.id}', 'up')">👍</button>
+        <button onclick="voter('${docSnap.id}', 'down')">👎</button>
+        Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎
       </div>
-      <div>Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
-      <div>Lectures : ${data.lectures || 0}</div>
-      <div>
-        <textarea id="comment-${capsuleId}" placeholder="Écrire un commentaire…"></textarea>
-        <button onclick="commenter('${capsuleId}')">Envoyer</button>
-      </div>
-      <div id="commentaires-${capsuleId}" class="commentaires"></div>
+      <div class="lectures">Lectures : ${data.lectures || 0}</div>
+      <textarea id="comment-${docSnap.id}" placeholder="Écrire un commentaire…"></textarea>
+      <button onclick="commenter('${docSnap.id}')">Envoyer</button>
+      <div class="commentaires" id="comments-${docSnap.id}"></div>
     `;
     container.appendChild(capsuleDiv);
 
-    // Afficher les commentaires (s'ils existent)
-    if (Array.isArray(data.commentaires) && data.commentaires.length > 0) {
-      const commBlock = capsuleDiv.querySelector("#commentaires-" + capsuleId);
-      commBlock.innerHTML = "<b>Commentaires :</b><br>" + data.commentaires.map(c => `<div>— ${c}</div>`).join("");
+    // Ajout lecture
+    const capsuleRef = doc(db, "capsules", docSnap.id);
+    await updateDoc(capsuleRef, { lectures: increment(1) });
+
+    // Afficher commentaires si présents
+    if (data.commentaires && Array.isArray(data.commentaires)) {
+      document.getElementById(`comments-${docSnap.id}`).innerHTML =
+        "<b>Commentaires :</b><br>" +
+        data.commentaires.map(c => `<span>— ${c}</span>`).join("<br>");
     }
   });
 }
 
 window.voter = async function (id, type) {
-  if (hasVoted(id)) {
-    alert("Vous avez déjà voté pour cette capsule.");
-    return;
-  }
   const capsuleRef = doc(db, "capsules", id);
   const field = type === "up" ? "votes_up" : "votes_down";
   await updateDoc(capsuleRef, { [field]: increment(1) });
-  setVoted(id);
-  afficherCapsules();
+  location.reload();
 };
 
 window.commenter = async function (id) {
   const textarea = document.getElementById("comment-" + id);
-  const text = textarea.value.tri
+  const text = textarea.value.trim();
+  if (!text) return;
+  const capsuleRef = doc(db, "capsules", id);
+  await updateDoc(capsuleRef, {
+    commentaires: arrayUnion(text)
+  });
+  alert("Commentaire ajouté.");
+  textarea.value = "";
+  location.reload();
+};
+
+afficherCapsules();
