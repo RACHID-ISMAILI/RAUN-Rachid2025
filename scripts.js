@@ -5,24 +5,25 @@ import { firebaseConfig } from "./firebase-config.js";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// --- Pour gérer le défilement des capsules ---
 let capsulesData = [];
 let currentIndex = 0;
 
 async function chargerCapsules() {
   const querySnapshot = await getDocs(collection(db, "capsules"));
   capsulesData = [];
-  querySnapshot.forEach(docSnap => {
-    capsulesData.push({ id: docSnap.id, ...docSnap.data() });
+  querySnapshot.forEach((docSnap) => {
+    capsulesData.push({ ...docSnap.data(), id: docSnap.id });
   });
-  afficherCapsule();
 }
 
-function afficherCapsule() {
+function afficherCapsuleUnique(index) {
   const container = document.getElementById("capsulesContainer");
-  container.innerHTML = "";
-  if (capsulesData.length === 0) return container.innerHTML = "<i>Aucune capsule.</i>";
-
-  const data = capsulesData[currentIndex];
+  if (capsulesData.length === 0) {
+    container.innerHTML = "<div style='color:lime'>Aucune capsule</div>";
+    return;
+  }
+  const data = capsulesData[index];
   let commentairesHtml = "";
   if (Array.isArray(data.commentaires)) {
     commentairesHtml = data.commentaires.map(
@@ -44,13 +45,34 @@ function afficherCapsule() {
       <div class="commentaires"><b>Commentaires :</b><br>${commentairesHtml}</div>
     </div>
   `;
-  // Compter la lecture une seule fois par session par capsule (lorsqu'affichée)
+  // Ne pas incrémenter la lecture sur vote ou commentaire, seulement à l’affichage
   if (!sessionStorage.getItem('lu_' + data.id)) {
     updateDoc(doc(db, "capsules", data.id), { lectures: increment(1) });
     sessionStorage.setItem('lu_' + data.id, "1");
   }
 }
 
+// Pour défiler gauche/droite
+window.capsuleSuivante = function () {
+  if (capsulesData.length === 0) return;
+  currentIndex = (currentIndex + 1) % capsulesData.length;
+  afficherCapsuleUnique(currentIndex);
+};
+window.capsulePrecedente = function () {
+  if (capsulesData.length === 0) return;
+  currentIndex = (currentIndex - 1 + capsulesData.length) % capsulesData.length;
+  afficherCapsuleUnique(currentIndex);
+};
+
+// Limite : empêcher plusieurs votes (stocke un flag localStorage par capsule)
+function canVote(id) {
+  return !localStorage.getItem('voted_' + id);
+}
+function markVoted(id) {
+  localStorage.setItem('voted_' + id, "1");
+}
+
+// --- Vote sans reload, n'incrémente PAS lectures ---
 window.voter = async function(id, type) {
   if (!canVote(id)) return;
   const capsuleRef = doc(db, "capsules", id);
@@ -58,9 +80,10 @@ window.voter = async function(id, type) {
   await updateDoc(capsuleRef, { [field]: increment(1) });
   markVoted(id);
   await chargerCapsules();
-  afficherCapsule();
+  afficherCapsuleUnique(currentIndex);
 };
 
+// --- Commenter sans reload ---
 window.commenter = async function(id) {
   const textarea = document.getElementById("comment-" + id);
   const text = textarea.value.trim();
@@ -71,32 +94,48 @@ window.commenter = async function(id) {
   });
   textarea.value = "";
   await chargerCapsules();
-  afficherCapsule();
+  afficherCapsuleUnique(currentIndex);
 };
-
-function canVote(id) {
-  return !localStorage.getItem('voted_' + id);
-}
-function markVoted(id) {
-  localStorage.setItem('voted_' + id, "1");
-}
-
-// Carousel navigation
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("prevCapsule").onclick = () => {
-    if (currentIndex > 0) currentIndex--;
-    else currentIndex = capsulesData.length - 1;
-    afficherCapsule();
-  };
-  document.getElementById("nextCapsule").onclick = () => {
-    if (currentIndex < capsulesData.length - 1) currentIndex++;
-    else currentIndex = 0;
-    afficherCapsule();
-  };
-  chargerCapsules();
-});
 
 window.subscribe = function () {
   const email = document.getElementById("subscribeEmail").value.trim();
   if (email) alert("Merci pour votre abonnement : " + email);
 };
+
+// Chargement initial
+window.onload = async function () {
+  await chargerCapsules();
+  afficherCapsuleUnique(currentIndex);
+};
+
+// ---- Matrix pluie (canvas intégré) ----
+document.addEventListener("DOMContentLoaded", function() {
+  const canvas = document.createElement("canvas");
+  canvas.id = "matrixRain";
+  document.body.prepend(canvas);
+  let ctx = canvas.getContext("2d");
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  let fontSize = 16, cols = Math.floor(window.innerWidth / fontSize);
+  let drops = Array(cols).fill(1);
+  let chars = "アァイィウヴエカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロワヲンabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%&";
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px monospace";
+    ctx.fillStyle = "#00ff66";
+    for (let i = 0; i < drops.length; i++) {
+      let txt = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(txt, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.98)
+        drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 42);
+});
