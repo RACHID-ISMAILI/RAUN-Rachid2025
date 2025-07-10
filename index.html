@@ -1,36 +1,353 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>RAUN-Rachid2025</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="scripts.js"></script>
+  <meta charset="UTF-8">
+  <title>RAUN — Capsules de Conscience</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%; width: 100%;
+      font-family: 'Consolas', 'Roboto Mono', monospace;
+      background: #000;
+      color: #00ff00;
+      min-height: 100vh;
+    }
+    #matrix-canvas {
+      position: fixed;
+      z-index: 0;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      opacity: 0.23;
+    }
+    .main-content {
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      text-align: center;
+      margin-top: 25px;
+      margin-bottom: 12px;
+    }
+    .photo-profil {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid #00ff00;
+      box-shadow: 0 0 45px #00ff44;
+      margin-bottom: 6px;
+      background: #0b2d0b;
+    }
+    .aura {
+      display: inline-block;
+      border-radius: 50%;
+      box-shadow: 0 0 40px #12ff85, 0 0 80px #00ff00;
+      padding: 6px;
+    }
+    .nom-rachid {
+      font-size: 1.3rem;
+      letter-spacing: 0.13em;
+      margin-top: 2px;
+      color: #cfffdf;
+      text-shadow: 0 0 6px #00ffcc;
+    }
+    h1 {
+      font-size: 2.1rem;
+      margin-bottom: 0.6em;
+      margin-top: 0.1em;
+      letter-spacing: 0.08em;
+      color: #00ffb3;
+      text-shadow: 0 0 6px #00ffc3;
+    }
+    .slogan {
+      font-size: 1.12rem;
+      margin-bottom: 1.1em;
+      color: #fffad6;
+      text-shadow: 0 0 16px #ffbb0066;
+      font-weight: bold;
+    }
+    .links {
+      margin-bottom: 16px;
+    }
+    .links a {
+      color: #00eaff;
+      text-decoration: underline;
+      margin: 0 11px;
+      font-size: 1.13rem;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    .links a:hover { color: #fff; }
+    #capsule-slider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 34px 0 10px 0;
+    }
+    .matrix-btn {
+      background: none;
+      border: none;
+      color: #00ff00;
+      font-size: 2.6rem;
+      cursor: pointer;
+      transition: text-shadow 0.3s, color 0.3s;
+      text-shadow: 0 0 8px #00ff00, 0 0 18px #00ff00;
+      outline: none;
+      padding: 0 18px;
+      user-select: none;
+    }
+    .matrix-btn:hover {
+      color: #fff;
+      text-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00;
+    }
+    #capsule-content {
+      min-width: 350px;
+      max-width: 650px;
+      min-height: 130px;
+      transition: opacity 0.4s;
+      color: #fff;
+      background: rgba(15,40,15,0.94);
+      border-radius: 18px;
+      box-shadow: 0 0 30px #00ff44;
+      margin: 0 18px;
+      padding: 28px 30px 20px 30px;
+      font-size: 1.13rem;
+      position: relative;
+    }
+    .fade { opacity: 1; transition: opacity 0.4s;}
+    .fade-out { opacity: 0; }
+    #capsule-index {
+      color: #00ffb3;
+      font-size: 1.08rem;
+      text-align: center;
+      margin-top: 7px;
+    }
+    .votes {
+      margin-top: 12px;
+      margin-bottom: 2px;
+      font-size: 1.18em;
+      color: #00ffb3;
+    }
+    .votes .matrix-btn { font-size: 1.3em; padding: 0 8px;}
+    .lectures { font-size:1em; color:#00fcd4;}
+    .comments-block {
+      margin-top: 14px;
+      background: rgba(10,40,20,0.60);
+      border-radius: 12px;
+      padding: 12px 8px 8px 8px;
+    }
+    .comments-block input {
+      background: #000;
+      color: #0f0;
+      border: 1px solid #00ff00;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 1em;
+      margin-bottom: 7px;
+    }
+    .comments-block button {
+      background: #020;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 6px;
+      margin-left: 8px;
+      padding: 3px 15px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .comment { margin-bottom: 6px; color: #b5ffdf; }
+    @media (max-width: 600px) {
+      #capsule-content { min-width:0; max-width:96vw; padding: 10px 7vw;}
+      .matrix-btn { font-size:2.1rem; padding:0 8px;}
+      .photo-profil { width:70px; height:70px;}
+    }
+  </style>
 </head>
 <body>
-  <img src="photo.jpg" alt="Rachid" class="profile-photo">
-  <header>
-    <div class="name">ISMAILI RACHID</div>
-    <h1>ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
-    <div class="description">
-      RAUN est une respiration numérique, une pulsation consciente dans le réseau…
+<canvas id="matrix-canvas"></canvas>
+<div class="main-content">
+  <div class="header">
+    <div class="aura">
+      <img src="4009fd75-e71d-43b7-857f-51582bf4af4a.jpg" alt="Photo profil" class="photo-profil">
     </div>
-    <nav>
-      <a href="https://wa.me/212650020464" target="_blank">WhatsApp</a>
-      <a href="mailto:isra1903@outlook.fr">Email</a>
-      <a href="https://www.linkedin.com/in/rachid-ismaili-68b61a27" target="_blank">LinkedIn</a>
+    <div class="nom-rachid">ISMAILI RACHID</div>
+    <h1>RAUN — ΔFEU — ψUN</h1>
+    <div class="links">
+      <a href="https://wa.me/212600000000">WhatsApp</a>
+      <a href="mailto:contact@raun.com">Email</a>
+      <a href="https://linkedin.com/">LinkedIn</a>
       <a href="admin.html">Admin</a>
-    </nav>
-    <marquee class="message-defilant">
-      ✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨
-    </marquee>
-  </header>
-  <main>
-    <div id="capsulesContainer"></div>
-    <div id="subscribe">
-      <input type="email" id="subscribeEmail" placeholder="Votre email">
-      <button onclick="subscribe()">S’abonner</button>
     </div>
-  </main>
+    <div class="slogan">✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨</div>
+  </div>
+
+  <!-- Slider Capsules -->
+  <div id="capsule-slider">
+    <button id="prev-capsule" class="matrix-btn" title="Capsule précédente">←</button>
+    <div id="capsule-content" class="fade"></div>
+    <button id="next-capsule" class="matrix-btn" title="Capsule suivante">→</button>
+  </div>
+  <div id="capsule-index"></div>
+</div>
+
+<script type="module">
+// ========== MATRIX RAIN CANVAS ==============
+function matrixRain() {
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  // Set canvas to window size
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const letters = "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  const fontSize = 22;
+  const columns = Math.floor(canvas.width / fontSize) + 1;
+  let drops = [];
+  for (let x = 0; x < columns; x++)
+    drops[x] = 1;
+
+  function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.09)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px monospace";
+    ctx.fillStyle = "#00ff00";
+    for (let i = 0; i < drops.length; i++) {
+      let text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.95)
+        drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(draw, 42);
+}
+matrixRain();
+// ============================================
+
+// === FIREBASE CONFIG (remplace avec la tienne) ===
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "API_KEY_ICI",
+  authDomain: "TON_DOMAINE.firebaseapp.com",
+  projectId: "TON_PROJECTID",
+  storageBucket: "TON_BUCKET.appspot.com",
+  messagingSenderId: "TON_ID",
+  appId: "TON_APPID"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let capsules = [];
+let currentIndex = 0;
+let capsulesIds = []; // Pour votes/commentaires Firestore
+
+// Affiche la capsule + votes/commentaires/lectures
+function showCapsule(index) {
+  const capsule = capsules[index];
+  const capsuleId = capsulesIds[index];
+  if (!capsule) return;
+  const capsuleContent = document.getElementById('capsule-content');
+  capsuleContent.classList.add('fade-out');
+  setTimeout(() => {
+    capsuleContent.innerHTML = `
+      <strong style="color:#00ffb3">${capsule.titre || ''}</strong><br><br>
+      ${capsule.contenu || ''}
+      <div class="votes">
+        <button onclick="window.voteCapsule(${index}, 'up')" class="matrix-btn" title="J'aime">👍</button>
+        <span id="votes-up">${capsule.votes_up||0}</span>
+        <button onclick="window.voteCapsule(${index}, 'down')" class="matrix-btn" title="Je n'aime pas">👎</button>
+        <span id="votes-down">${capsule.votes_down||0}</span>
+        <span class="lectures">&nbsp;•&nbsp; Lectures: <span id="lecture-count">${capsule.lectures||0}</span></span>
+      </div>
+      <div class="comments-block">
+        <b>Commentaires :</b>
+        <div id="commentaires">
+          ${(capsule.commentaires||[]).map(c=>`<div class="comment">${c}</div>`).join('')}
+        </div>
+        <input id="new-comment" placeholder="Écrire un commentaire..." maxlength="180">
+        <button onclick="window.addComment(${index})">Envoyer</button>
+      </div>
+    `;
+    capsuleContent.classList.remove('fade-out');
+  }, 270);
+  document.getElementById('capsule-index').textContent = `Capsule ${index+1} / ${capsules.length}`;
+  // Incrémente la lecture si on arrive sur la capsule (peut être affiné)
+  if (!capsule._alreadyViewed) {
+    capsule._alreadyViewed = true;
+    const capsuleId = capsulesIds[index];
+    if (capsuleId) {
+      const docRef = doc(db, "capsules", capsuleId);
+      updateDoc(docRef, { lectures: increment(1) });
+      capsules[index].lectures = (capsules[index].lectures||0)+1;
+    }
+  }
+}
+
+// Navigation capsules
+document.getElementById('prev-capsule').onclick = function() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    showCapsule(currentIndex);
+  }
+};
+document.getElementById('next-capsule').onclick = function() {
+  if (currentIndex < capsules.length - 1) {
+    currentIndex++;
+    showCapsule(currentIndex);
+  }
+};
+// Navigation clavier
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') document.getElementById('prev-capsule').click();
+  if (e.key === 'ArrowRight') document.getElementById('next-capsule').click();
+});
+
+// VOTES (👍👎)
+window.voteCapsule = async function(index, type) {
+  const capsuleId = capsulesIds[index];
+  if (!capsuleId) return;
+  const docRef = doc(db, "capsules", capsuleId);
+  const field = (type === 'up') ? 'votes_up' : 'votes_down';
+  await updateDoc(docRef, { [field]: increment(1) });
+  capsules[index][field] = (capsules[index][field]||0)+1;
+  showCapsule(index);
+}
+
+// COMMENTAIRES
+window.addComment = async function(index) {
+  const val = document.getElementById('new-comment').value.trim();
+  if (!val) return;
+  const capsuleId = capsulesIds[index];
+  if (!capsuleId) return;
+  const docRef = doc(db, "capsules", capsuleId);
+  await updateDoc(docRef, { commentaires: arrayUnion(val) });
+  capsules[index].commentaires = (capsules[index].commentaires||[]);
+  capsules[index].commentaires.push(val);
+  document.getElementById('new-comment').value = '';
+  showCapsule(index);
+}
+
+// Chargement des capsules Firestore
+async function chargerCapsules() {
+  const querySnapshot = await getDocs(collection(db, "capsules"));
+  capsules = [];
+  capsulesIds = [];
+  querySnapshot.forEach((docu) => {
+    capsules.push(docu.data());
+    capsulesIds.push(docu.id);
+  });
+  currentIndex = 0;
+  // Efface le flag lectures locales
+  capsules.forEach(c=>delete c._alreadyViewed);
+  showCapsule(currentIndex);
+}
+chargerCapsules();
+
+</script>
 </body>
 </html>
