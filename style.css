@@ -1,68 +1,146 @@
 body {
-  background: #000;
-  color: #00ff44;
-  font-family: monospace, monospace;
+  background: black;
+  color: #00FF41;
+  font-family: 'Fira Mono', 'Consolas', monospace;
   margin: 0;
   padding: 0;
 }
 
-header, main {
-  width: 95%;
-  margin: auto;
+.matrix-bg,
+.matrix-canvas {
+  position: fixed;
+  z-index: 0;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.profile-photo {
+  width: 90px;
+  border-radius: 50%;
+  margin: 10px auto 0;
+  display: block;
+  box-shadow: 0 0 30px 5px #00FF41, 0 0 0 4px #000;
 }
 
 header {
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 25px;
+  z-index: 1;
+  position: relative;
 }
 
 .name {
-  color: #00ff44;
-  font-size: 2em;
-  margin-top: 10px;
+  color: #00FF41;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 5px;
   letter-spacing: 2px;
 }
 
 .description {
-  color: #88ffcc;
-  font-size: 1.1em;
+  color: #90ffb0;
+  font-size: 1rem;
   margin-bottom: 15px;
 }
 
 nav a {
-  color: #00aaff;
+  color: #0cf0ff;
+  text-decoration: none;
   margin: 0 8px;
-  text-decoration: underline;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #fff;
+  text-shadow: 0 0 5px #00FF41;
 }
 
 .message-defilant {
-  color: #aaffaa;
-  font-size: 1.1em;
-  margin: 10px 0;
+  color: #faffc7;
+  background: transparent;
+  font-size: 1.1rem;
+  margin: 10px auto 5px;
+  width: 90%;
+}
+
+#capsulesContainer {
+  z-index: 1;
+  margin: 30px auto 0;
+  max-width: 900px;
 }
 
 .capsule {
-  border: 1px solid #00ff44;
-  border-radius: 12px;
-  margin: 18px 0;
-  padding: 18px;
-  background: rgba(0, 30, 0, 0.16);
-  box-shadow: 0 0 12px #00440055;
+  border: 1px solid #00FF41;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  padding: 15px;
+  background: rgba(0,0,0,0.7);
+  box-shadow: 0 0 12px #00FF41;
 }
 
 .capsule h2 {
-  color: #66ff99;
-  font-size: 1.4em;
-  margin-bottom: 5px;
-}
-
-.capsule p {
-  color: #baffd0;
+  color: #0cf0ff;
   margin-bottom: 10px;
 }
 
-button {
-  background: #000;
-  color: #00ff44;
-  border: 1px solid
+.capsule textarea,
+.capsule input[type="text"] {
+  width: 90%;
+  background: #222;
+  color: #00FF41;
+  border: 1px solid #00FF41;
+  padding: 5px;
+  margin-top: 8px;
+}
+
+.capsule button {
+  background: #00FF41;
+  color: #000;
+  border: none;
+  padding: 4px 14px;
+  margin-left: 5px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.capsule button:hover {
+  background: #008f39;
+  color: #fff;
+}
+
+#subscribe {
+  text-align: center;
+  margin: 40px 0 20px 0;
+  z-index: 1;
+}
+
+#subscribe input,
+#subscribe button {
+  font-size: 1rem;
+  border: 1px solid #00FF41;
+  background: #111;
+  color: #00FF41;
+  padding: 4px 10px;
+  border-radius: 5px;
+}
+
+#subscribe button {
+  background: #00FF41;
+  color: #111;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+#subscribe button:hover {
+  background: #008f39;
+  color: #fff;
+}
