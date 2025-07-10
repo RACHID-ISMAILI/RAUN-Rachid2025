@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
@@ -15,76 +14,49 @@ async function afficherCapsules() {
   const container = document.getElementById("capsulesContainer");
   const querySnapshot = await getDocs(collection(db, "capsules"));
   container.innerHTML = "";
+
   querySnapshot.forEach(async (docSnap) => {
     const data = docSnap.data();
+    const id = docSnap.id;
+    // Gérer le vote unique par capsule avec localStorage
+    const votedKey = `voted-${id}`;
+    const hasVoted = localStorage.getItem(votedKey);
+
+    // Création du bloc capsule
     const capsuleDiv = document.createElement("div");
-    capsuleDiv.innerHTML = `
-      <h2>${data.titre}</h2>
-      <p>${data.contenu}</p>
-      <div>
-        <button onclick="voter('${docSnap.id}', 'up')">👍</button>
-        <button onclick="voter('${docSnap.id}', 'down')">👎</button>
-      </div>
-      <div id="votes-${docSnap.id}">Votes : ${data.votes_up} 👍 / ${data.votes_down} 👎</div>
-      <div>Lectures : ${data.lectures || 0}</div>
-      <textarea id="comment-${docSnap.id}" placeholder="Écrire un commentaire…"></textarea>
-      <button onclick="commenter('${docSnap.id}')">Envoyer</button>
-    `;
-    container.appendChild(capsuleDiv);
+    capsuleDiv.className = "capsule";
 
-    // Compter la lecture
-    const capsuleRef = doc(db, "capsules", docSnap.id);
-    await updateDoc(capsuleRef, { lectures: increment(1) });
-  });
-}
+    // Créer les boutons votes
+    const upBtn = document.createElement("button");
+    upBtn.innerText = "👍";
+    upBtn.type = "button";
+    upBtn.disabled = !!hasVoted;
+    upBtn.onclick = async function(e) {
+      e.preventDefault();
+      if (localStorage.getItem(votedKey)) {
+        alert("Tu as déjà voté pour cette capsule !");
+        return;
+      }
+      const capsuleRef = doc(db, "capsules", id);
+      await updateDoc(capsuleRef, { votes_up: increment(1) });
+      localStorage.setItem(votedKey, "true");
+      afficherCapsules();
+    };
 
-window.voter = async function (id, type) {
-  const capsuleRef = doc(db, "capsules", id);
-  const field = type === "up" ? "votes_up" : "votes_down";
-  await updateDoc(capsuleRef, { [field]: increment(1) });
-  location.reload();
-};
+    const downBtn = document.createElement("button");
+    downBtn.innerText = "👎";
+    downBtn.type = "button";
+    downBtn.disabled = !!hasVoted;
+    downBtn.onclick = async function(e) {
+      e.preventDefault();
+      if (localStorage.getItem(votedKey)) {
+        alert("Tu as déjà voté pour cette capsule !");
+        return;
+      }
+      const capsuleRef = doc(db, "capsules", id);
+      await updateDoc(capsuleRef, { votes_down: increment(1) });
+      localStorage.setItem(votedKey, "true");
+      afficherCapsules();
+    };
 
-window.commenter = async function (id) {
-  const textarea = document.getElementById("comment-" + id);
-  const text = textarea.value.trim();
-  if (!text) return;
-  const capsuleRef = doc(db, "capsules", id);
-  await updateDoc(capsuleRef, {
-    commentaires: arrayUnion(text)
-  });
-  alert("Commentaire ajouté.");
-  textarea.value = "";
-};
-
-afficherCapsules();
-
-// Fonction de vote +
-window.voteUp = async function(id) {
-  const docRef = doc(db, "capsules", id);
-  await updateDoc(docRef, {
-    votes_up: increment(1)
-  });
-  document.getElementById(`vote-${id}`).innerText = "👍 vote en cours...";
-  setTimeout(() => window.location.reload(), 600);
-};
-
-// Fonction de vote -
-window.voteDown = async function(id) {
-  const docRef = doc(db, "capsules", id);
-  await updateDoc(docRef, {
-    votes_down: increment(1)
-  });
-  document.getElementById(`vote-${id}`).innerText = "👎 vote en cours...";
-  setTimeout(() => window.location.reload(), 600);
-};
-
-// Fonction lecture
-window.incrementLectures = async function(id) {
-  const docRef = doc(db, "capsules", id);
-  await updateDoc(docRef, {
-    lectures: increment(1)
-  });
-  document.getElementById(`lect-${id}`).innerText = "Lecture en cours...";
-  setTimeout(() => window.location.reload(), 800);
-};
+    // Zone commentaires
