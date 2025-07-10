@@ -1,135 +1,112 @@
 body {
-  background: #020c02;
-  color: #00ff99;
-  font-family: monospace, monospace;
+  background: #010e07;
+  color: #baffc9;
+  font-family: monospace;
   margin: 0;
-  padding: 0;
-  min-height: 100vh;
 }
-
-#matrixRain, .matrix-bg, canvas.matrix-bg {
+#matrixRain {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 1;
+  z-index: 0;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none;
 }
-
 .profile-photo {
-  position: relative;
-  z-index: 10;
-  width: 110px;
-  height: 110px;
-  object-fit: cover;
+  display: block;
+  margin: 18px auto 0;
+  width: 120px; height: 120px;
   border-radius: 50%;
-  margin: 20px auto 12px auto;
-  display: block;
-  box-shadow: 0 0 25px #0f0, 0 0 45px #0f08;
-  border: 3px solid #00ff99;
-  background: #111;
-}
-
-header, nav, main {
+  box-shadow: 0 0 32px 12px #00ff55, 0 0 2px #fff;
   position: relative;
-  z-index: 5;
+  z-index: 2;
 }
-
+header {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
 .name {
-  text-align: center;
-  font-size: 1.1rem;
-  margin-bottom: 2px;
-  color: #16ff16;
-  letter-spacing: 2px;
+  font-size: 1.2em;
+  color: #00ff66;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
 }
-
 h1 {
-  text-align: center;
-  color: #31ff7a;
-  font-size: 2.2rem;
-  margin: 6px 0 10px 0;
-  letter-spacing: 4px;
+  color: #22ff44;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.2em;
 }
-
-.description, nav {
-  text-align: center;
-  margin-bottom: 9px;
-  color: #7fffaf;
+.description {
+  color: #c7ffe2;
+  margin-bottom: 10px;
 }
-
 nav a {
-  color: #00f6ff;
+  color: #00ffff;
+  text-decoration: underline;
   margin: 0 8px;
-  text-decoration: none;
-  font-size: 1.06rem;
-  font-weight: 600;
-  transition: color 0.2s;
+  font-size: 1.09em;
 }
-nav a:hover {
-  color: #faff8a;
+marquee {
+  color: #adffb6;
+  font-size: 1.11em;
+  margin: 10px 0 12px;
 }
-
-.message-defilant {
-  display: block;
-  color: #ffffbb;
-  margin: 8px auto;
-  font-weight: bold;
-  font-size: 1.08rem;
-  background: transparent;
-}
-
-.capsule {
-  border: 1.5px solid #16ff16;
-  border-radius: 12px;
-  background: rgba(0, 32, 8, 0.91);
-  padding: 12px;
-  margin: 18px auto;
-  max-width: 640px;
-  min-width: 260px;
-  box-shadow: 0 0 14px #10ff60;
+main {
+  max-width: 900px;
+  margin: 0 auto;
   position: relative;
+  z-index: 2;
 }
-
-.capsule button, input, textarea {
-  background: black; color: #16ff16;
-  border: 1px solid #33ff33;
-  font-family: inherit; font-size: 1rem;
-  border-radius: 7px; padding: 3.5px 10px;
+.capsules-controls {
+  text-align: center;
+  margin-bottom: 7px;
+}
+.capsules-controls button {
+  background: #050;
+  color: #00ff99;
+  border: 2px solid #00ff66;
+  border-radius: 50%;
+  width: 48px; height: 48px;
+  font-size: 2em;
+  margin: 0 32px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.capsule {
+  background: rgba(0,40,10,0.89);
+  border: 2px solid #00ff66;
+  border-radius: 13px;
+  margin: 18px 0;
+  padding: 18px 15px;
+  font-size: 1.2em;
+  box-shadow: 0 0 12px 0 #00ff66a0;
+}
+button, textarea, input {
+  background: black;
+  color: #baffc9;
+  font-family: monospace;
+  border-radius: 7px;
+  border: 1px solid #00ff66;
+  font-size: 1em;
   margin: 2px 0;
 }
-.capsule button:disabled { opacity: 0.3; cursor: not-allowed; }
-
-textarea {
-  width: 65%; min-height: 38px; resize: vertical;
-  margin: 4px 0 0 0;
+textarea { width: 70%; height: 2.3em; margin-right: 4px;}
+.commentaires { margin-top: 6px; color: #00ffaa;}
+.comment { margin-bottom: 2px;}
+.subscribe-form {
+  text-align: center; margin-top: 25px;
 }
-
-.commentaires {
-  margin: 5px 0 2px 0;
-  color: #9affdc;
-  font-size: 0.98rem;
+.subscribe-form input, .subscribe-form button {
+  font-size: 1.13em;
+  padding: 7px 8px;
 }
-.comment {
-  margin-left: 8px; padding-left: 2px; border-left: 2px solid #10ff99;
-  color: #aff;
+.subscribe-form button {
+  color: #00ff66;
+  border: 2px solid #00ff66;
+  background: #010e07;
+  border-radius: 8px;
 }
-
-#subscribe {
-  text-align: center; margin: 26px auto 10px auto;
-}
-#subscribe input[type="email"] {
-  width: 160px;
-}
-#subscribe button {
-  margin-left: 10px;
-  background: black;
-  border: 1.5px solid #00ff99;
-  color: #8fffdf;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 @media (max-width: 700px) {
-  .capsule { max-width: 97vw; font-size: 1.02rem; }
-  h1 { font-size: 1.15rem; }
-  .profile-photo { width: 55px; height: 55px; }
+  .capsule { font-size: 1em; padding: 8px 5px;}
+  .profile-photo { width: 70px; height: 70px;}
+  .capsules-controls button { width: 38px; height: 38px; font-size: 1.4em;}
 }
