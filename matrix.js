@@ -3,13 +3,12 @@ const ctx = canvas.getContext('2d');
 
 // -- CHOIX DES CARACTÈRES (chiffres + lettres)
 const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-// -- TAILLE ET NOMBRE DE COLONNES
-const fontSize = 28; // taille des caractères
-const columnSpacing = 34; // espace horizontal entre colonnes
+const fontSize = 28; // Taille du caractère
+const verticalSpacing = 46; // <--- espace vertical ENTRE les caractères
+const columnSpacing = 34;
 let columns;
 
-// -- Initialisation dimensions canvas
+// Ajuste la taille du canvas et le nombre de colonnes
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -18,54 +17,44 @@ function resizeCanvas() {
 resizeCanvas();
 window.onresize = resizeCanvas;
 
-// -- Lignes de chaque colonne (position verticale)
 let drops = [];
 function initDrops() {
   drops = [];
   for (let i = 0; i < columns; i++) {
-    // Position aléatoire de départ pour chaque colonne
-    drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+    // Décalage de départ aléatoire pour la fluidité
+    drops[i] = Math.floor(Math.random() * canvas.height / verticalSpacing);
   }
 }
 initDrops();
-window.onresize = () => {
-  resizeCanvas();
-  initDrops();
-};
+window.onresize = () => { resizeCanvas(); initDrops(); };
 
-// -- ANIMATION PRINCIPALE
+// -- ANIMATION
 function draw() {
-  // Fait un fondu (effet traînée)
-  ctx.fillStyle = 'rgba(10,24,8,0.15)';
+  ctx.fillStyle = 'rgba(10,24,8,0.18)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.font = fontSize + "px monospace";
   ctx.textAlign = "center";
 
   for (let i = 0; i < columns; i++) {
-    // Prend un caractère au hasard
+    let y = drops[i] * verticalSpacing;
+    // Caractère aléatoire
     const text = chars.charAt(Math.floor(Math.random() * chars.length));
-
-    // Espace chaque colonne avec columnSpacing
     const x = i * columnSpacing + columnSpacing / 2;
 
-    // Couleur du "glow" (vert matrix)
+    // Effet glow matrix
     ctx.shadowColor = "#00ff99";
-    ctx.shadowBlur = 16;
-
-    // Couleur du texte
+    ctx.shadowBlur = 15;
     ctx.fillStyle = "#b8ffb1";
-    ctx.fillText(text, x, drops[i] * fontSize);
+    ctx.fillText(text, x, y);
 
     ctx.shadowBlur = 0;
 
-    // Mouvement doux
-    if (Math.random() > 0.99) {
+    // "descente" douce
+    if (y > canvas.height && Math.random() > 0.98) {
       drops[i] = 0;
-    }
-    drops[i] += 0.33; // **Vitesse lente, souple**
-    if (drops[i] * fontSize > canvas.height) {
-      drops[i] = 0;
+    } else {
+      drops[i] += 0.27; // vitesse lente/souple
     }
   }
 
