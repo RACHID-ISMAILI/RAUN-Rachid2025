@@ -10,7 +10,6 @@
 <body>
   <canvas id="matrixRain"></canvas>
   <img src="photo.jpg" alt="Rachid" class="profile-photo">
-
   <header>
     <div class="name">ISMAILI RACHID</div>
     <h1>ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
@@ -28,25 +27,18 @@
     </marquee>
   </header>
 
-  <div class="admin-box public-add-capsule">
-    <h2>Nouvelle Capsule / Article 📝</h2>
-    <input id="publicTitre" type="text" placeholder="Titre de la capsule / article" required>
-    <textarea id="publicContenu" placeholder="Contenu détaillé (texte, article, inspiration…)"></textarea>
-    <button onclick="ajouterCapsulePublic()">Publier</button>
-    <div id="publicAjoutMsg"></div>
-  </div>
-
   <div class="carousel-container">
-    <button onclick="capsulePrecedente()" class="carousel-btn">⬅️</button>
+    <button id="prevCapsule" class="carousel-btn">⬅️</button>
     <div id="carousel">
       <div id="capsulesContainer"></div>
     </div>
-    <button onclick="capsuleSuivante()" class="carousel-btn">➡️</button>
+    <button id="nextCapsule" class="carousel-btn">➡️</button>
   </div>
 
   <form class="subscribe-form" onsubmit="window.subscribe(); return false;">
     <input id="subscribeEmail" type="email" placeholder="Votre email" required>
     <button type="submit">S'abonner</button>
   </form>
+  <script src="matrix.js"></script>
 </body>
 </html>
