@@ -52,7 +52,7 @@ function draw() {
     if (y > canvas.height && Math.random() > 0.96) {
       drops[i] = 0;
     } else {
-      drops[i] += Math.random() * 0.38 + 0.39; // Super fluide, vitesse lente
+      drops[i] += Math.random() * 0.15 + 0.11; // Vitesse Matrix TRÈS LENTE
     }
   }
 
