@@ -1,4 +1,4 @@
-// matrix.js - Effet Matrix style film, chiffres en colonnes espacées et clairs
+// matrix.js - Matrix effet très souple et fluide, chiffres bien séparés
 
 const canvas = document.getElementById('matrixRain');
 const ctx = canvas.getContext('2d');
@@ -13,12 +13,24 @@ const columns = Math.floor(width / fontSize);
 const drops = [];
 const digits = "0123456789";
 
+// Pour chaque colonne, la position actuelle (en lignes)
 for (let i = 0; i < columns; i++) {
   drops[i] = Math.floor(Math.random() * height / fontSize);
 }
 
-function draw() {
-  ctx.fillStyle = "rgba(0, 30, 0, 0.22)"; // léger voile vert/noir transparent
+// ----- Variables pour ralentir -----
+let lastUpdate = 0;
+const speed = 42; // en ms : plus grand = plus lent (essaie 30, 40, 55...)
+
+function draw(now) {
+  // Contrôle de la vitesse très souple
+  if (now - lastUpdate < speed) {
+    requestAnimationFrame(draw);
+    return;
+  }
+  lastUpdate = now;
+
+  ctx.fillStyle = "rgba(0, 30, 0, 0.22)";
   ctx.fillRect(0, 0, width, height);
 
   ctx.font = fontSize + "px monospace";
@@ -28,18 +40,17 @@ function draw() {
     const x = i * fontSize + fontSize / 2;
     const y = drops[i] * fontSize;
 
-    // Effet vert Matrix net
     ctx.shadowColor = "#00ff88";
     ctx.shadowBlur = 14;
     ctx.fillStyle = "#d8ffd0";
     ctx.globalAlpha = 0.96;
     ctx.fillText(text, x, y);
 
-    // Avance la goutte, réinitialise parfois pour éviter superposition
-    if (y > height && Math.random() > 0.965) {
+    // Avance la goutte, souplement
+    if (y > height && Math.random() > 0.96) {
       drops[i] = 0;
     } else {
-      drops[i]++;
+      drops[i] += 1; // Plus tu mets petit (0.5), plus c'est lent. Laisse 1 pour descente pixel par pixel
     }
   }
   ctx.globalAlpha = 1.0;
@@ -56,4 +67,4 @@ function resizeMatrix() {
 }
 window.addEventListener('resize', resizeMatrix);
 
-draw();
+requestAnimationFrame(draw);
