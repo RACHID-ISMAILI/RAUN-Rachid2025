@@ -21,26 +21,72 @@ nav a { color: #00ffff; margin: 0 8px; text-decoration: underline;}
 .message-defilant { color: #ffcc66; font-size: 1.08rem; }
 .carousel-container { display: flex; justify-content: center; align-items: center; margin: 15px 0; }
 .carousel-btn { background: transparent; color: #00ff99; font-size: 2.2rem; border: none; cursor: pointer; z-index: 4;}
-#carousel { width: 700px; min-height: 350px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+#carousel {
+  width: 100%;
+  min-height: 440px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 #capsulesContainer { width: 100%; z-index: 4;}
 .capsule {
-  background: rgba(0,30,0,0.85);
-  border: 2px solid #00ff66;
-  border-radius: 18px;
-  margin: 12px auto; padding: 18px 20px;
+  background: rgba(0,30,0,0.92);
+  border: 2.5px solid #00ff66;
+  border-radius: 22px;
+  margin: 18px auto;
+  padding: 34px 42px 30px 42px;
   color: #ccffcc;
-  box-shadow: 0 0 12px 2px #0f0a;
-  min-width: 300px;
-  max-width: 600px;
+  box-shadow: 0 0 32px 4px #0f0a;
+  min-width: 480px;
+  max-width: 920px;
+  min-height: 270px;
+  font-size: 1.17rem;
   z-index: 4;
 }
 textarea, input[type="email"] {
-  background: #0f2a1a; color: #afffaf; border: 1px solid #33ff33;
-  font-family: monospace; font-size: 1rem; border-radius: 8px; padding: 7px;
+  background: #0f2a1a;
+  color: #afffaf;
+  border: 1px solid #33ff33;
+  font-family: monospace;
+  font-size: 1rem;
+  border-radius: 8px;
+  padding: 7px;
 }
-button { background: black; color: #33ff33; border: 1px solid #33ff33; border-radius: 8px; padding: 6px 12px; font-size: 1rem; margin-left: 4px; }
+button {
+  background: black;
+  color: #33ff33;
+  border: 1px solid #33ff33;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 1rem;
+  margin-left: 4px;
+}
 .subscribe-form { margin: 18px auto; display: flex; justify-content: center; gap: 6px; }
 .commentaires { margin-top: 8px; }
-.comment { background: #111; color: #b2ffba; padding: 3px 7px; border-radius: 7px; margin: 2px 0; font-size: 0.97rem;}
+.comment {
+  background: #111;
+  color: #b2ffba;
+  padding: 3px 7px;
+  border-radius: 7px;
+  margin: 2px 0;
+  font-size: 0.97rem;
+}
 /* Mettre le canvas Matrix tout au fond */
-#matrixRain { position: fixed; top: 0; left: 0; z-index: 0; width: 100vw; height: 100vh; pointer-events: none; }
+#matrixRain {
+  position: fixed;
+  top: 0; left: 0; z-index: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 900px) {
+  .capsule {
+    min-width: 95vw;
+    max-width: 99vw;
+    padding: 16px 4vw 14px 4vw;
+    font-size: 1.07rem;
+  }
+  #carousel { min-height: 270px;}
+}
