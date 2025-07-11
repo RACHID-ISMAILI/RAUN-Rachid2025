@@ -11,13 +11,14 @@ function startMatrixRain() {
   resizeMatrix();
   window.addEventListener('resize', resizeMatrix);
 
-  const letters = "0123456789".split(""); // Chiffres uniquement
-  const fontSize = 22;
+  const letters = "0123456789".split("");
+  const fontSize = 24; // Taille bien lisible
+  const spacing = 2;   // Espace entre les chiffres
   let columns, drops, speed;
-  speed = 0.31;
+  speed = 0.29; // Fluide et Matrix
 
   function initDrops() {
-    columns = Math.floor(canvas.width / fontSize);
+    columns = Math.floor(canvas.width / (fontSize + spacing));
     drops = [];
     for (let x = 0; x < columns; x++) drops[x] = Math.random() * canvas.height / fontSize;
   }
@@ -25,22 +26,31 @@ function startMatrixRain() {
   window.addEventListener('resize', initDrops);
 
   function draw() {
-    // Fond noir semi-transparent (crée la traînée Matrix)
-    ctx.fillStyle = "rgba(0, 12, 2, 0.16)";
+    // Fond noir semi-transparent (traînée Matrix)
+    ctx.fillStyle = "rgba(0, 15, 6, 0.14)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.font = `${fontSize}px monospace`;
-    for (let i = 0; i < drops.length; i++) {
-      const text = letters[Math.floor(Math.random() * letters.length)];
-      // "Tête" blanche pour le chiffre qui tombe en tête de colonne
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      // Traînée verte néon
-      ctx.fillStyle = "#08ff44";
-      ctx.fillText(text, i * fontSize, (drops[i] - 1) * fontSize);
+    for (let i = 0; i < columns; i++) {
+      let x = i * (fontSize + spacing);
+      let y = drops[i] * fontSize;
 
+      // Tête blanche
+      ctx.fillStyle = "#fff";
+      const headNum = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(headNum, x, y);
+
+      // Traînée Matrix (plusieurs nuances vertes derrière la tête)
+      for (let k = 1; k < 9; k++) {
+        const fade = Math.max(0, 1 - k / 8);
+        ctx.fillStyle = `rgba(57, 255, 20, ${0.35 * fade})`; // Vert Matrix, alpha décroissant
+        const trailNum = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(trailNum, x, y - k * fontSize);
+      }
+
+      // Déplacement goutte
       drops[i] += speed;
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.977) drops[i] = 0;
+      if (y > canvas.height && Math.random() > 0.978) drops[i] = 0;
     }
     requestAnimationFrame(draw);
   }
