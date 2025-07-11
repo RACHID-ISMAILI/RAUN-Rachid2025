@@ -6,6 +6,27 @@
   <link rel="stylesheet" href="style.css">
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="admin-capsule.js"></script>
+  <style>
+    .slider-btn {
+      background: #222;
+      color: #00ff99;
+      border: none;
+      font-size: 2.2rem;
+      border-radius: 9px;
+      cursor: pointer;
+      margin: 0 20px;
+      padding: 6px 18px 4px 18px;
+      transition: background 0.15s;
+      z-index: 5;
+    }
+    .slider-btn:active { background: #080; }
+    .capsule-admin-slider { display: flex; align-items: center; justify-content: center; margin-top: 18px;}
+    #adminCapsule { flex:1; }
+    #adminCapsule { min-height: 280px; }
+    @media (max-width:700px) {
+      .slider-btn { font-size: 1.6rem; margin: 0 4vw; padding: 4px 4vw; }
+    }
+  </style>
 </head>
 <body>
   <img src="photo.jpg" alt="Rachid" class="profile-photo">
@@ -24,8 +45,115 @@
       <textarea id="capsContent" placeholder="Contenu" required></textarea>
       <button type="submit">Ajouter la capsule</button>
     </form>
-    <div id="capsulesList"></div>
+    <!-- Slider capsules admin -->
+    <div class="capsule-admin-slider" style="margin-bottom:26px;">
+      <button class="slider-btn" id="prevCapsuleBtn" title="Capsule précédente">←</button>
+      <div id="adminCapsule"></div>
+      <button class="slider-btn" id="nextCapsuleBtn" title="Capsule suivante">→</button>
+    </div>
     <button onclick="logoutAdmin()">Déconnexion</button>
   </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { firebaseConfig } from "./firebase-config.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let capsules = [];
+    let currentIndex = 0;
+
+    // --- Authentification simplifiée (fonctionne comme avant) ---
+    window.loginAdmin = function() {
+      // ... (ta logique d'auth, ou celle actuelle)
+      // Juste pour test :
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("adminPanel").style.display = "";
+      loadCapsules();
+    };
+    window.logoutAdmin = function() {
+      document.getElementById("loginBox").style.display = "";
+      document.getElementById("adminPanel").style.display = "none";
+    };
+
+    // --- Ajout de capsule ---
+    document.getElementById("addCapsuleForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const titre = document.getElementById("capsTitle").value.trim();
+      const contenu = document.getElementById("capsContent").value.trim();
+      if (!titre || !contenu) return alert("Merci de remplir tous les champs.");
+      await addDoc(collection(db, "capsules"), {
+        titre: titre,
+        contenu: contenu,
+        date: serverTimestamp(),
+        lectures: 0,
+        votes_up: 0,
+        votes_down: 0,
+        commentaires: []
+      });
+      document.getElementById("capsTitle").value = "";
+      document.getElementById("capsContent").value = "";
+      await loadCapsules();
+      alert("Capsule ajoutée !");
+    });
+
+    // --- Chargement capsules ---
+    async function loadCapsules() {
+      const querySnapshot = await getDocs(collection(db, "capsules"));
+      capsules = [];
+      querySnapshot.forEach((docu) => {
+        capsules.push({ id: docu.id, ...docu.data() });
+      });
+      if (capsules.length === 0) {
+        document.getElementById("adminCapsule").innerHTML = "<div class='capsule'><i>Aucune capsule enregistrée.</i></div>";
+        currentIndex = 0;
+        return;
+      }
+      if (currentIndex >= capsules.length) currentIndex = capsules.length-1;
+      showCapsule(currentIndex);
+    }
+
+    // --- Affichage capsule slider ---
+    function showCapsule(idx) {
+      if (capsules.length === 0) return;
+      currentIndex = idx;
+      const cap = capsules[currentIndex];
+      document.getElementById("adminCapsule").innerHTML = `
+        <div class="capsule">
+          <div><b>${cap.titre || ""}</b></div>
+          <div style="margin:7px 0 13px 0;">${cap.contenu || ""}</div>
+          <div style="margin-top:16px;">
+            Votes : ${cap.votes_up||0} 👍 / ${cap.votes_down||0} 👎 — Lectures : ${cap.lectures||0}
+          </div>
+          <button style="margin-top:18px;" onclick="deleteCapsule('${cap.id}')">🗑️ Supprimer</button>
+          <div style="margin-top:8px;font-size:0.97em;color:#44f">Capsule ${currentIndex+1} / ${capsules.length}</div>
+        </div>
+      `;
+    }
+
+    // --- Slider events ---
+    document.getElementById("prevCapsuleBtn").onclick = function() {
+      if (capsules.length > 0 && currentIndex > 0) showCapsule(currentIndex-1);
+    };
+    document.getElementById("nextCapsuleBtn").onclick = function() {
+      if (capsules.length > 0 && currentIndex < capsules.length-1) showCapsule(currentIndex+1);
+    };
+
+    // --- Supprimer une capsule ---
+    window.deleteCapsule = async function(id) {
+      if (!confirm("Supprimer cette capsule ?")) return;
+      await deleteDoc(doc(db, "capsules", id));
+      await loadCapsules();
+    };
+
+    // --- Démarre sur le panel caché, capsules chargées à la connexion
+    // (Pour test sans login, décommente la ligne suivante)
+    // document.getElementById("loginBox").style.display = "none"; document.getElementById("adminPanel").style.display = "";
+
+    // expose functions for inline onclick
+    window.showCapsule = showCapsule;
+
+  </script>
 </body>
 </html>
