@@ -16,7 +16,6 @@ canvas#matrixRain {
   pointer-events: none;
 }
 
-/* Tous les blocs importants devant la pluie Matrix */
 .profile-photo,
 header,
 .carousel-container,
@@ -30,7 +29,6 @@ header,
   z-index: 10;
 }
 
-/* Photo de profil */
 .profile-photo {
   display: block;
   margin: 28px auto 12px auto;
@@ -83,7 +81,6 @@ marquee.message-defilant {
   border-radius: 12px;
 }
 
-/* Carousel et capsules */
 .carousel-container {
   display: flex;
   justify-content: center;
@@ -103,7 +100,6 @@ marquee.message-defilant {
 .carousel-btn:active { transform: scale(1.17); }
 #carousel { min-width: 340px; max-width: 780px; width: 100%; }
 
-/* Capsule affichée (public) */
 .capsule {
   margin: 32px auto 32px auto;
   max-width: 760px;
@@ -125,11 +121,9 @@ marquee.message-defilant {
   color: #e0ffe6;
   word-break: break-word;
 }
-
-/* Commentaires */
 .capsule textarea {
   width: 100%;
-  min-height: 48px;  /* PLUS GRAND */
+  min-height: 48px;
   font-size: 1.13em;
   margin-top: 13px;
   margin-bottom: 8px;
@@ -153,8 +147,7 @@ marquee.message-defilant {
   color: #f7ffe7;
 }
 
-/* Formulaire admin (capsule/article) */
-.admin-box, #adminPanel {
+.admin-box, #adminPanel, .public-add-capsule {
   background: rgba(8, 25, 8, 0.97);
   border-radius: 18px;
   box-shadow: 0 0 25px #1aff63bb;
@@ -163,10 +156,9 @@ marquee.message-defilant {
   margin: 38px auto 0 auto;
   z-index: 12;
 }
-.admin-box textarea,
-#adminPanel textarea {
+.admin-box textarea, .public-add-capsule textarea, #adminPanel textarea {
   width: 100%;
-  min-height: 180px; /* ENORME pour articles ! */
+  min-height: 180px;
   font-size: 1.15em;
   background: #061b08;
   color: #aaffcc;
@@ -176,8 +168,7 @@ marquee.message-defilant {
   resize: vertical;
   margin-bottom: 12px;
 }
-.admin-box input[type="text"],
-#adminPanel input[type="text"] {
+.admin-box input[type="text"], .public-add-capsule input[type="text"], #adminPanel input[type="text"] {
   width: 100%;
   font-size: 1.12em;
   padding: 8px 14px;
@@ -187,8 +178,7 @@ marquee.message-defilant {
   border-radius: 9px;
   border: 1.5px solid #00ff66;
 }
-
-.admin-box button, #adminPanel button {
+.admin-box button, .public-add-capsule button, #adminPanel button {
   background: #00ff66;
   color: #222;
   font-size: 1.14em;
@@ -200,16 +190,17 @@ marquee.message-defilant {
   margin: 4px 0;
   transition: background 0.2s, color 0.2s;
 }
-.admin-box button:hover, #adminPanel button:hover {
+.admin-box button:hover, .public-add-capsule button:hover, #adminPanel button:hover {
   background: #111;
   color: #00ff66;
   border: 1.2px solid #00ff66;
 }
 
-/* Abonnement */
 .subscribe-form {
   margin: 32px auto 12px auto;
   text-align: center;
+  z-index: 1;
+  position: relative;
 }
 .subscribe-form input[type="email"] {
   font-size: 1.13em;
@@ -238,16 +229,15 @@ marquee.message-defilant {
   border: 1.2px solid #00ff66;
 }
 
-/* Responsive */
 @media (max-width: 900px) {
-  .capsule, .admin-box, #adminPanel {
+  .capsule, .admin-box, #adminPanel, .public-add-capsule {
     max-width: 98vw;
     padding-left: 7vw;
     padding-right: 7vw;
   }
 }
 @media (max-width: 600px) {
-  .capsule, .admin-box, #adminPanel {
+  .capsule, .admin-box, #adminPanel, .public-add-capsule {
     padding: 7vw 3vw;
     font-size: 1em;
   }
