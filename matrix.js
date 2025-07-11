@@ -11,10 +11,10 @@ function startMatrixRain() {
   resizeMatrix();
   window.addEventListener('resize', resizeMatrix);
 
-  const letters = "アァカサタナハマヤャラワガザダバパABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+  const letters = "0123456789".split(""); // ⬅️ Uniquement des chiffres !
   const fontSize = 22;
   let columns, drops, speed;
-  speed = 0.32; // <--- PLUS PETIT = PLUS LENT
+  speed = 0.32; // Doux et fluide
 
   function initDrops() {
     columns = Math.floor(canvas.width / fontSize);
@@ -33,7 +33,6 @@ function startMatrixRain() {
     for (let i = 0; i < drops.length; i++) {
       const text = letters[Math.floor(Math.random() * letters.length)];
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      // Ici on augmente drops[i] très peu à chaque frame pour ralentir la pluie
       drops[i] += speed;
       if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
     }
