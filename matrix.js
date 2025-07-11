@@ -3,6 +3,7 @@ function startMatrixRain() {
   const canvas = document.getElementById("matrixRain");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
+
   function resizeMatrix() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -12,7 +13,9 @@ function startMatrixRain() {
 
   const letters = "アァカサタナハマヤャラワガザダバパABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
   const fontSize = 22;
-  let columns, drops;
+  let columns, drops, speed;
+  speed = 0.32; // <--- PLUS PETIT = PLUS LENT
+
   function initDrops() {
     columns = Math.floor(canvas.width / fontSize);
     drops = [];
@@ -30,8 +33,9 @@ function startMatrixRain() {
     for (let i = 0; i < drops.length; i++) {
       const text = letters[Math.floor(Math.random() * letters.length)];
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) drops[i] = 0;
-      drops[i]++;
+      // Ici on augmente drops[i] très peu à chaque frame pour ralentir la pluie
+      drops[i] += speed;
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
     }
     requestAnimationFrame(draw);
   }
