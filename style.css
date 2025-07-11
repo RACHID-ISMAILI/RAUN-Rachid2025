@@ -69,16 +69,52 @@ input[type="email"], input[type="password"] {
   font-size: 1.11rem;
   margin: 10px auto 18px auto;
 }
-button {
-  background: black;
-  color: #33ff33;
-  border: 1px solid #33ff33;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 1rem;
-  margin-left: 4px;
+
+/* FORMULAIRE D’ABONNEMENT : version petite, centrée */
+.subscribe-form {
+  margin: 22px auto 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  max-width: 380px;
+  width: 96vw;
 }
-.subscribe-form { margin: 18px auto; display: flex; justify-content: center; gap: 6px; }
+.subscribe-form input[type="email"] {
+  width: 210px;
+  max-width: 55vw;
+  min-width: 90px;
+  font-size: 1.07rem;
+  padding: 9px 11px;
+  border-radius: 9px;
+  border: 1.5px solid #33ff33;
+  background: #102a1a;
+  color: #b0ffcf;
+  margin-right: 7px;
+  min-height: unset;
+  margin-top: 0;
+  margin-bottom: 0;
+  display: inline-block;
+}
+.subscribe-form button {
+  font-size: 1.07rem;
+  border-radius: 9px;
+  padding: 9px 19px;
+  border: 1.5px solid #33ff33;
+  background: black;
+  color: #39ff39;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  margin-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 45px;
+  display: inline-block;
+}
+.subscribe-form button:hover {
+  background: #00ff99;
+  color: #000;
+}
 .commentaires { margin-top: 8px; }
 .comment {
   background: #111;
@@ -177,6 +213,25 @@ button {
   .login-box input[type="email"],
   .login-box input[type="password"] {
     max-width: 97vw;
+    font-size: 1rem;
+  }
+  .subscribe-form {
+    max-width: 94vw;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+  }
+  .subscribe-form input[type="email"] {
+    width: 97vw;
+    max-width: 99vw;
+    font-size: 1rem;
+    padding: 7px 2vw;
+    margin-right: 0;
+  }
+  .subscribe-form button {
+    width: 90vw;
+    max-width: 99vw;
+    padding: 9px 0;
     font-size: 1rem;
   }
 }
