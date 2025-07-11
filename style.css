@@ -44,7 +44,7 @@ nav a { color: #00ffff; margin: 0 8px; text-decoration: underline;}
   font-size: 1.17rem;
   z-index: 4;
 }
-textarea, .comment-textarea, input[type="email"] {
+textarea, .comment-textarea, input[type="email"], input[type="password"] {
   background: #0f2a1a;
   color: #afffaf;
   border: 1px solid #33ff33;
@@ -60,6 +60,14 @@ textarea, .comment-textarea, input[type="email"] {
   margin-top: 10px;
   margin-bottom: 12px;
   display: block;
+}
+input[type="email"], input[type="password"] {
+  min-height: unset;
+  padding: 12px;
+  width: 96%;
+  max-width: 330px;
+  font-size: 1.11rem;
+  margin: 10px auto 18px auto;
 }
 button {
   background: black;
@@ -79,6 +87,65 @@ button {
   border-radius: 7px;
   margin: 2px 0;
   font-size: 0.97rem;
+}
+/* --- STYLE LOGIN ADMIN --- */
+.login-box {
+  background: rgba(0,32,0,0.78);
+  box-shadow: 0 0 24px 2px #00ff77;
+  border-radius: 18px;
+  padding: 36px 38px 24px 38px;
+  margin: 38px auto 24px auto;
+  max-width: 410px;
+  min-width: 320px;
+  text-align: center;
+  border: 1.5px solid #00ff77;
+  z-index: 2;
+}
+.login-box input[type="email"],
+.login-box input[type="password"] {
+  width: 90%;
+  max-width: 320px;
+  margin: 8px auto 18px auto;
+  font-size: 1.12rem;
+  display: block;
+  background: #111b18;
+  color: #aaffbb;
+  border: 1.5px solid #00ff99;
+  border-radius: 8px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border 0.2s;
+}
+.login-box input:focus {
+  border: 1.5px solid #00ffd9;
+}
+.login-box button {
+  margin: 20px auto 0 auto;
+  width: 160px;
+  font-size: 1.13rem;
+  background: #000;
+  color: #00ff77;
+  border: 2px solid #00ff77;
+  border-radius: 9px;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: background 0.17s, color 0.17s;
+  display: block;
+}
+.login-box button:hover {
+  background: #00ff99;
+  color: #000;
+}
+.login-box h2 {
+  color: #39ff5e;
+  font-size: 1.35rem;
+  margin-bottom: 18px;
+  margin-top: 0;
+}
+.danger {
+  color: #ff6666;
+  font-size: 1.1em;
+  margin-top: 8px;
 }
 /* Mettre le canvas Matrix tout au fond */
 #matrixRain {
@@ -103,4 +170,13 @@ button {
     font-size: 1rem;
   }
   #carousel { min-height: 270px;}
+  .login-box {
+    max-width: 97vw;
+    padding: 12vw 2vw 7vw 2vw;
+  }
+  .login-box input[type="email"],
+  .login-box input[type="password"] {
+    max-width: 97vw;
+    font-size: 1rem;
+  }
 }
