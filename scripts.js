@@ -14,7 +14,12 @@ async function fetchCapsules() {
   querySnapshot.forEach(docSnap => {
     capsules.push({ id: docSnap.id, ...docSnap.data() });
   });
-  capsules.sort((a, b) => (b.date || "").localeCompare(a.date || "")); // Optionnel : du + récent au + ancien
+  // TRI PAR DATE CORRIGÉ
+  capsules.sort((a, b) => {
+    const dateA = a.date ? (a.date.toMillis ? a.date.toMillis() : a.date) : 0;
+    const dateB = b.date ? (b.date.toMillis ? b.date.toMillis() : b.date) : 0;
+    return dateB - dateA;
+  });
 }
 
 function canVote(id) {
@@ -55,14 +60,14 @@ async function afficherCapsule(index) {
   document.getElementById("capsulesContainer").innerHTML = `
     <div class="capsule">
       <b>${data.titre || "(Sans titre)"}</b><br>
-      <div>${data.contenu || ""}</div>
+      <div style="margin: 10px 0 16px 0;">${data.contenu || ""}</div>
       <div>
         <button onclick="window.voter('${id}', 'up')" ${canVote(id) ? "" : "disabled"}>👍</button>
         <button onclick="window.voter('${id}', 'down')" ${canVote(id) ? "" : "disabled"}>👎</button>
       </div>
       <div>Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
       <div>Lectures : <span id="lect-${id}">${data.lectures || 0}</span></div>
-      <textarea id="comment-${id}" placeholder="Écrire un commentaire…"></textarea>
+      <textarea id="comment-${id}" placeholder="Écrire un commentaire…" class="comment-textarea"></textarea>
       <button onclick="window.commenter('${id}')">Envoyer</button>
       <div class="commentaires"><b>Commentaires :</b><br>${commentairesHtml}</div>
     </div>
@@ -111,5 +116,3 @@ window.subscribe = function () {
   const email = document.getElementById("subscribeEmail").value.trim();
   if (email) alert("Merci pour votre abonnement : " + email);
 };
-
-// Optionnel : rafraîchir les lectures à l’affichage mais pas au vote !
