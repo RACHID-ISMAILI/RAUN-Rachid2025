@@ -1,77 +1,59 @@
-// matrix.js
-function startMatrixRain() {
-  const canvas = document.getElementById("matrixRain");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
+// matrix.js - Effet Matrix style film, chiffres en colonnes espacées et clairs
 
-  function resizeMatrix() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resizeMatrix();
-  window.addEventListener('resize', () => {
-    resizeMatrix();
-    initDrops();
-  });
+const canvas = document.getElementById('matrixRain');
+const ctx = canvas.getContext('2d');
 
-  const letters = "0123456789".split("");
-  const fontSize = 24;
-  const spacing = 4; // Espacement entre colonnes
-  const trailLength = 10; // Longueur de la traînée
-  let columns, drops, speed;
-  speed = 0.29;
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
 
-  function initDrops() {
-    columns = Math.floor(canvas.width / (fontSize + spacing));
-    drops = [];
-    for (let x = 0; x < columns; x++) {
-      drops[x] = Math.random() * canvas.height / fontSize;
-    }
-  }
-  initDrops();
+const fontSize = 28;
+const columns = Math.floor(width / fontSize);
+const drops = [];
+const digits = "0123456789";
 
-  function draw() {
-    ctx.fillStyle = "rgba(0, 15, 6, 0.13)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.font = `${fontSize}px monospace`;
-
-    for (let i = 0; i < columns; i++) {
-      let x = i * (fontSize + spacing);
-
-      // Pour chaque colonne, chaque chiffre de la traînée a un offset horizontal aléatoire (zigzag)
-      for (let k = 0; k < trailLength; k++) {
-        // Décalage horizontal aléatoire pour chaque chiffre (max +/-8px)
-        let offsetX = (Math.random() - 0.5) * fontSize * 0.7;
-        let realX = x + offsetX;
-
-        // Position verticale du chiffre
-        let y = (drops[i] - k) * fontSize;
-
-        // Opacité dégressive pour la traînée, couleur tête blanche, reste vert Matrix
-        let fade = Math.max(0, 1 - k / (trailLength - 1));
-        if (k === 0) {
-          ctx.fillStyle = "#fff"; // Tête blanche
-        } else {
-          ctx.fillStyle = `rgba(57, 255, 20, ${0.33 * fade})`; // Traînée Matrix verte
-        }
-
-        // Affichage du chiffre (si à l'écran)
-        if (y > 0 && y < canvas.height) {
-          const num = letters[Math.floor(Math.random() * letters.length)];
-          ctx.fillText(num, realX, y);
-        }
-      }
-
-      // Mouvement goutte
-      drops[i] += speed;
-      // Reset goutte en bas avec petit random
-      if ((drops[i] - trailLength) * fontSize > canvas.height && Math.random() > 0.978) {
-        drops[i] = 0;
-      }
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
+for (let i = 0; i < columns; i++) {
+  drops[i] = Math.floor(Math.random() * height / fontSize);
 }
-if(document.getElementById("matrixRain")) startMatrixRain();
+
+function draw() {
+  ctx.fillStyle = "rgba(0, 30, 0, 0.22)"; // léger voile vert/noir transparent
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.font = fontSize + "px monospace";
+  ctx.textAlign = "center";
+  for (let i = 0; i < columns; i++) {
+    const text = digits[Math.floor(Math.random() * digits.length)];
+    const x = i * fontSize + fontSize / 2;
+    const y = drops[i] * fontSize;
+
+    // Effet vert Matrix net
+    ctx.shadowColor = "#00ff88";
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = "#d8ffd0";
+    ctx.globalAlpha = 0.96;
+    ctx.fillText(text, x, y);
+
+    // Avance la goutte, réinitialise parfois pour éviter superposition
+    if (y > height && Math.random() > 0.965) {
+      drops[i] = 0;
+    } else {
+      drops[i]++;
+    }
+  }
+  ctx.globalAlpha = 1.0;
+  ctx.shadowBlur = 0;
+
+  requestAnimationFrame(draw);
+}
+
+function resizeMatrix() {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+}
+window.addEventListener('resize', resizeMatrix);
+
+draw();
