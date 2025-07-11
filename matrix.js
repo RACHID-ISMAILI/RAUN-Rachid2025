@@ -1,13 +1,13 @@
 const canvas = document.getElementById('matrixRain');
 const ctx = canvas.getContext('2d');
 
-// -- CHOIX DES CARACTÈRES (chiffres + lettres)
-const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const fontSize = 28; // Taille du caractère
-const verticalSpacing = 62; // <--- écart très grand entre caractères
-const columnSpacing = 34;
-let columns;
+// --- Caractères Matrix (chiffres, lettres, katakana pour l'ambiance Matrix) ---
+const matrixChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZアカサタナハマヤラワガザダバパイキシチニヒミリヰギジヂビピウクスツヌフムユルグズヅブプエケセテネヘメレヱゲゼデベペオコソトノホモヨロヲゴゾドボポヴッン";
+const fontSize = 22;    // Taille du caractère (réaliste Matrix)
+const columnSpacing = 21; // Distance horizontale entre colonnes (doit être >= fontSize pour espacer les colonnes)
+let columns = 0;
 
+// Taille du canvas toujours à la taille de la fenêtre
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -20,35 +20,45 @@ let drops = [];
 function initDrops() {
   drops = [];
   for (let i = 0; i < columns; i++) {
-    drops[i] = Math.floor(Math.random() * canvas.height / verticalSpacing);
+    drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
   }
 }
 initDrops();
 
+// Animation
 function draw() {
-  ctx.fillStyle = 'rgba(10,24,8,0.18)';
+  // Effet de fondu (pour garder les trainées)
+  ctx.fillStyle = "rgba(0, 15, 4, 0.15)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = fontSize + "px monospace";
+  ctx.font = `${fontSize}px monospace`;
   ctx.textAlign = "center";
 
   for (let i = 0; i < columns; i++) {
-    let y = drops[i] * verticalSpacing;
-    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-    const x = i * columnSpacing + columnSpacing / 2;
+    // Choisir un caractère aléatoire
+    const char = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+    // Calculer la position
+    const x = i * columnSpacing + columnSpacing/2;
+    const y = drops[i] * fontSize;
 
-    ctx.shadowColor = "#00ff99";
-    ctx.shadowBlur = 15;
-    ctx.fillStyle = "#b8ffb1";
-    ctx.fillText(text, x, y);
+    // Effet vert lumineux
+    ctx.shadowColor = "#b6ffca";
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = "#21fd0e";
+    ctx.fillText(char, x, y);
 
+    // Tête du flux plus blanche/vert clair (pour Matrix)
     ctx.shadowBlur = 0;
+    if (Math.random() > 0.95) {
+      ctx.fillStyle = "#fff";
+      ctx.fillText(char, x, y);
+    }
 
-    // Descente très très lente et douce
-    if (y > canvas.height && Math.random() > 0.98) {
+    // Réinitialiser quand la ligne sort de l'écran
+    if (y > canvas.height && Math.random() > 0.96) {
       drops[i] = 0;
     } else {
-      drops[i] += 0.15; // encore plus lent
+      drops[i] += Math.random() * 0.45 + 0.57; // Vitesse aléatoire, douce et fluide
     }
   }
 
