@@ -8,7 +8,7 @@
   <script type="module" src="scripts.js"></script>
 </head>
 <body>
-  <!-- Matrix Rain (ajouté automatiquement) -->
+  <canvas id="matrixRain"></canvas>
   <img src="photo.jpg" alt="Rachid" class="profile-photo">
 
   <header>
@@ -28,8 +28,7 @@
     </marquee>
   </header>
 
-  <!-- Formulaire Ajout Capsule Public -->
-  <div class="admin-box" style="margin-top:18px;margin-bottom:0;">
+  <div class="admin-box public-add-capsule">
     <h2>Nouvelle Capsule / Article 📝</h2>
     <input id="publicTitre" type="text" placeholder="Titre de la capsule / article" required>
     <textarea id="publicContenu" placeholder="Contenu détaillé (texte, article, inspiration…)"></textarea>
@@ -37,7 +36,6 @@
     <div id="publicAjoutMsg"></div>
   </div>
 
-  <!-- Carousel capsules -->
   <div class="carousel-container">
     <button onclick="capsulePrecedente()" class="carousel-btn">⬅️</button>
     <div id="carousel">
@@ -46,7 +44,6 @@
     <button onclick="capsuleSuivante()" class="carousel-btn">➡️</button>
   </div>
 
-  <!-- Abonnement -->
   <form class="subscribe-form" onsubmit="window.subscribe(); return false;">
     <input id="subscribeEmail" type="email" placeholder="Votre email" required>
     <button type="submit">S'abonner</button>
