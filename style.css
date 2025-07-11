@@ -44,14 +44,22 @@ nav a { color: #00ffff; margin: 0 8px; text-decoration: underline;}
   font-size: 1.17rem;
   z-index: 4;
 }
-textarea, input[type="email"] {
+textarea, .comment-textarea, input[type="email"] {
   background: #0f2a1a;
   color: #afffaf;
   border: 1px solid #33ff33;
   font-family: monospace;
-  font-size: 1rem;
+  font-size: 1.13rem;
   border-radius: 8px;
-  padding: 7px;
+  padding: 12px;
+  width: 99%;
+  min-width: 97%;
+  max-width: 100%;
+  min-height: 100px;
+  box-sizing: border-box;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  display: block;
 }
 button {
   background: black;
@@ -87,6 +95,12 @@ button {
     max-width: 99vw;
     padding: 16px 4vw 14px 4vw;
     font-size: 1.07rem;
+  }
+  textarea, .comment-textarea {
+    min-width: 95vw;
+    max-width: 99vw;
+    padding: 10px 2vw 10px 2vw;
+    font-size: 1rem;
   }
   #carousel { min-height: 270px;}
 }
