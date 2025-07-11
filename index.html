@@ -8,36 +8,36 @@
   <script type="module" src="scripts.js"></script>
 </head>
 <body>
-  <!-- Matrix Rain (ajouté automatiquement par scripts.js) -->
+  <!-- Matrix Rain (ajouté automatiquement) -->
   <img src="photo.jpg" alt="Rachid" class="profile-photo">
 
   <header>
-    <div class="name" style="text-align:center;">ISMAILI RACHID</div>
-    <h1 style="text-align:center;">ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
-    <div class="description" style="text-align:center;">
+    <div class="name">ISMAILI RACHID</div>
+    <h1>ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
+    <div class="description">
       RAUN est une respiration numérique, une pulsation consciente dans le réseau…
     </div>
-    <nav style="text-align:center;">
+    <nav>
       <a href="https://wa.me/212650020464" target="_blank">WhatsApp</a>
       <a href="mailto:isra1903@outlook.fr">Email</a>
       <a href="https://www.linkedin.com/in/rachid-ismaili-68b61a27" target="_blank">LinkedIn</a>
       <a href="admin.html">Admin</a>
     </nav>
-    <marquee class="message-defilant" style="color:#ffb700;">
+    <marquee class="message-defilant">
       ✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨
     </marquee>
   </header>
 
-  <!-- Carousel capsules défilement gauche/droite -->
-  <!-- Ajout Capsule Public NON sécurisé -->
-<div class="public-add-capsule">
-  <h2>Publier une Capsule / Article 📝</h2>
-  <input id="publicTitre" type="text" placeholder="Titre de la capsule / article" required>
-  <textarea id="publicContenu" placeholder="Contenu détaillé…"></textarea>
-  <button onclick="ajouterCapsulePublic()">Publier</button>
-  <div id="publicAjoutMsg"></div>
-</div>
+  <!-- Formulaire Ajout Capsule Public -->
+  <div class="admin-box" style="margin-top:18px;margin-bottom:0;">
+    <h2>Nouvelle Capsule / Article 📝</h2>
+    <input id="publicTitre" type="text" placeholder="Titre de la capsule / article" required>
+    <textarea id="publicContenu" placeholder="Contenu détaillé (texte, article, inspiration…)"></textarea>
+    <button onclick="ajouterCapsulePublic()">Publier</button>
+    <div id="publicAjoutMsg"></div>
+  </div>
 
+  <!-- Carousel capsules -->
   <div class="carousel-container">
     <button onclick="capsulePrecedente()" class="carousel-btn">⬅️</button>
     <div id="carousel">
