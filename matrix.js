@@ -16,17 +16,16 @@ function startMatrixRain() {
 
   const letters = "0123456789".split("");
   const fontSize = 24;
-  const spacing = 4;   // Espace entre colonnes
-  let columns, drops, speed, offsets;
+  const spacing = 4; // Espacement entre colonnes
+  const trailLength = 10; // Longueur de la traînée
+  let columns, drops, speed;
   speed = 0.29;
 
   function initDrops() {
     columns = Math.floor(canvas.width / (fontSize + spacing));
     drops = [];
-    offsets = [];
     for (let x = 0; x < columns; x++) {
       drops[x] = Math.random() * canvas.height / fontSize;
-      offsets[x] = Math.random() * fontSize; // Décalage vertical initial pour chaque colonne
     }
   }
   initDrops();
@@ -36,32 +35,39 @@ function startMatrixRain() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.font = `${fontSize}px monospace`;
+
     for (let i = 0; i < columns; i++) {
       let x = i * (fontSize + spacing);
-      let y = drops[i] * fontSize + offsets[i];
 
-      // Tête blanche
-      ctx.fillStyle = "#fff";
-      const headNum = letters[Math.floor(Math.random() * letters.length)];
-      ctx.fillText(headNum, x, y);
+      // Pour chaque colonne, chaque chiffre de la traînée a un offset horizontal aléatoire (zigzag)
+      for (let k = 0; k < trailLength; k++) {
+        // Décalage horizontal aléatoire pour chaque chiffre (max +/-8px)
+        let offsetX = (Math.random() - 0.5) * fontSize * 0.7;
+        let realX = x + offsetX;
 
-      // Traînée Matrix (plusieurs nuances vertes)
-      for (let k = 1; k < 9; k++) {
-        const fade = Math.max(0, 1 - k / 8);
-        ctx.fillStyle = `rgba(57, 255, 20, ${0.35 * fade})`;
-        const trailNum = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(trailNum, x, y - k * fontSize);
+        // Position verticale du chiffre
+        let y = (drops[i] - k) * fontSize;
+
+        // Opacité dégressive pour la traînée, couleur tête blanche, reste vert Matrix
+        let fade = Math.max(0, 1 - k / (trailLength - 1));
+        if (k === 0) {
+          ctx.fillStyle = "#fff"; // Tête blanche
+        } else {
+          ctx.fillStyle = `rgba(57, 255, 20, ${0.33 * fade})`; // Traînée Matrix verte
+        }
+
+        // Affichage du chiffre (si à l'écran)
+        if (y > 0 && y < canvas.height) {
+          const num = letters[Math.floor(Math.random() * letters.length)];
+          ctx.fillText(num, realX, y);
+        }
       }
 
       // Mouvement goutte
       drops[i] += speed;
-
-      // Décalage vertical dynamique : vibration matrix (très discret)
-      if (Math.random() > 0.995) offsets[i] = Math.random() * fontSize;
-
-      if (y > canvas.height && Math.random() > 0.978) {
+      // Reset goutte en bas avec petit random
+      if ((drops[i] - trailLength) * fontSize > canvas.height && Math.random() > 0.978) {
         drops[i] = 0;
-        offsets[i] = Math.random() * fontSize;
       }
     }
     requestAnimationFrame(draw);
