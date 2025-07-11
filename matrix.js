@@ -1,70 +1,74 @@
-// matrix.js - Matrix effet très souple et fluide, chiffres bien séparés
-
 const canvas = document.getElementById('matrixRain');
 const ctx = canvas.getContext('2d');
 
-let width = window.innerWidth;
-let height = window.innerHeight;
-canvas.width = width;
-canvas.height = height;
+// -- CHOIX DES CARACTÈRES (chiffres + lettres)
+const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const fontSize = 28;
-const columns = Math.floor(width / fontSize);
-const drops = [];
-const digits = "0123456789";
+// -- TAILLE ET NOMBRE DE COLONNES
+const fontSize = 28; // taille des caractères
+const columnSpacing = 34; // espace horizontal entre colonnes
+let columns;
 
-// Pour chaque colonne, la position actuelle (en lignes)
-for (let i = 0; i < columns; i++) {
-  drops[i] = Math.floor(Math.random() * height / fontSize);
+// -- Initialisation dimensions canvas
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  columns = Math.floor(canvas.width / columnSpacing);
 }
+resizeCanvas();
+window.onresize = resizeCanvas;
 
-// ----- Variables pour ralentir -----
-let lastUpdate = 0;
-const speed = 42; // en ms : plus grand = plus lent (essaie 30, 40, 55...)
-
-function draw(now) {
-  // Contrôle de la vitesse très souple
-  if (now - lastUpdate < speed) {
-    requestAnimationFrame(draw);
-    return;
+// -- Lignes de chaque colonne (position verticale)
+let drops = [];
+function initDrops() {
+  drops = [];
+  for (let i = 0; i < columns; i++) {
+    // Position aléatoire de départ pour chaque colonne
+    drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
   }
-  lastUpdate = now;
+}
+initDrops();
+window.onresize = () => {
+  resizeCanvas();
+  initDrops();
+};
 
-  ctx.fillStyle = "rgba(0, 30, 0, 0.22)";
-  ctx.fillRect(0, 0, width, height);
+// -- ANIMATION PRINCIPALE
+function draw() {
+  // Fait un fondu (effet traînée)
+  ctx.fillStyle = 'rgba(10,24,8,0.15)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.font = fontSize + "px monospace";
   ctx.textAlign = "center";
+
   for (let i = 0; i < columns; i++) {
-    const text = digits[Math.floor(Math.random() * digits.length)];
-    const x = i * fontSize + fontSize / 2;
-    const y = drops[i] * fontSize;
+    // Prend un caractère au hasard
+    const text = chars.charAt(Math.floor(Math.random() * chars.length));
 
-    ctx.shadowColor = "#00ff88";
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = "#d8ffd0";
-    ctx.globalAlpha = 0.96;
-    ctx.fillText(text, x, y);
+    // Espace chaque colonne avec columnSpacing
+    const x = i * columnSpacing + columnSpacing / 2;
 
-    // Avance la goutte, souplement
-    if (y > height && Math.random() > 0.96) {
+    // Couleur du "glow" (vert matrix)
+    ctx.shadowColor = "#00ff99";
+    ctx.shadowBlur = 16;
+
+    // Couleur du texte
+    ctx.fillStyle = "#b8ffb1";
+    ctx.fillText(text, x, drops[i] * fontSize);
+
+    ctx.shadowBlur = 0;
+
+    // Mouvement doux
+    if (Math.random() > 0.99) {
       drops[i] = 0;
-    } else {
-      drops[i] += 1; // Plus tu mets petit (0.5), plus c'est lent. Laisse 1 pour descente pixel par pixel
+    }
+    drops[i] += 0.33; // **Vitesse lente, souple**
+    if (drops[i] * fontSize > canvas.height) {
+      drops[i] = 0;
     }
   }
-  ctx.globalAlpha = 1.0;
-  ctx.shadowBlur = 0;
 
   requestAnimationFrame(draw);
 }
-
-function resizeMatrix() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-}
-window.addEventListener('resize', resizeMatrix);
-
-requestAnimationFrame(draw);
+draw();
