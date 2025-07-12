@@ -10,7 +10,7 @@
     html, body {
       height: 100vh;
       margin: 0;
-      overflow: hidden; /* Empêche le scroll général */
+      overflow: hidden;
       width: 100vw;
     }
     body {
@@ -48,51 +48,6 @@
       box-shadow: 0 0 18px #00ff99b9;
       padding: 0 0 0 0;
       margin: 0 10px;
-    }
-    #capsulesContainer {
-      height: 38vh;
-      overflow-y: auto;
-      width: 100%;
-      padding: 16px 22px 7px 22px;
-      box-sizing: border-box;
-      color: #e8ffe3;
-      font-size: 1.05rem;
-    }
-    .comments-block {
-      height: 17vh;
-      overflow-y: auto;
-      width: 65vw;
-      max-width: 760px;
-      min-width: 330px;
-      margin: 18px auto 0 auto;
-      background: rgba(0,0,0,0.82);
-      border-radius: 14px;
-      color: #e8ffe3;
-      padding: 10px 20px 4px 20px;
-      box-shadow: 0 0 10px #00ff99b7;
-    }
-    .carousel-btn {
-      background: #111;
-      color: #00ff99;
-      border: none;
-      font-size: 2.2rem;
-      border-radius: 9px;
-      cursor: pointer;
-      margin: 0 12px;
-      padding: 8px 16px 4px 16px;
-      transition: background 0.18s;
-      z-index: 3;
-    }
-    .carousel-btn:active { background: #040; }
-    /* Pour la responsivité mobile */
-    @media (max-width:700px) {
-      #carousel, .comments-block {
-        width: 97vw;
-        min-width: 0;
-        max-width: 99vw;
-      }
-      .carousel-btn { font-size: 1.2rem; padding: 2px 8px; }
-      #capsulesContainer { font-size: 0.98rem; }
     }
     .profile-photo {
       display: block;
@@ -201,15 +156,6 @@
         <div id="capsulesContainer"></div>
       </div>
       <button id="nextCapsule" class="carousel-btn">➡️</button>
-    </div>
-
-    <div class="comments-block" id="commentsBlock">
-      <!-- Zone de commentaires, scroll vertical -->
-      <div id="commentsContainer"></div>
-      <form id="commentForm" style="margin-top:6px;">
-        <input type="text" id="commentInput" placeholder="Écrire un commentaire…" style="width:80%;border-radius:5px;border:none;padding:5px 9px;background:#222;color:#e8ffe3;">
-        <button type="submit" style="border:none;border-radius:5px;background:#00ff99;color:#111;padding:5px 11px;cursor:pointer;">Envoyer</button>
-      </form>
     </div>
   </div>
 
