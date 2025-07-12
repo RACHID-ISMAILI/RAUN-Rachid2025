@@ -6,39 +6,71 @@
   <link rel="stylesheet" href="style.css">
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="scripts.js"></script>
-</head>
-<body>
-  <canvas id="matrixRain"></canvas>
-  <img src="photo.jpg" alt="Rachid" class="profile-photo">
-  <header>
-    <div class="name">ISMAILI RACHID</div>
-    <h1>ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
-    <div class="description">
-      RAUN est une respiration numérique, une pulsation consciente dans le réseau…
-    </div>
-    <nav>
-      <a href="https://wa.me/212650020464" target="_blank">WhatsApp</a>
-      <a href="mailto:isra1903@outlook.fr">Email</a>
-      <a href="https://www.linkedin.com/in/rachid-ismaili-68b61a27" target="_blank">LinkedIn</a>
-      <a href="admin.html">Admin</a>
-    </nav>
-    <marquee class="message-defilant">
-      ✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨
-    </marquee>
-  </header>
-
-  <div class="carousel-container">
-    <button id="prevCapsule" class="carousel-btn">⬅️</button>
-    <div id="carousel">
-      <div id="capsulesContainer"></div>
-    </div>
-    <button id="nextCapsule" class="carousel-btn">➡️</button>
-  </div>
-
-  <form class="subscribe-form" onsubmit="window.subscribe(); return false;">
-    <input id="subscribeEmail" type="email" placeholder="Votre email" required>
-    <button type="submit">S'abonner</button>
-  </form>
-  <script src="matrix.js"></script>
-</body>
-</html>
+  <style>
+    html, body {
+      height: 100vh;
+      margin: 0;
+      overflow: hidden; /* Empêche le scroll général */
+      width: 100vw;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background: #000;
+    }
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      justify-content: flex-start;
+    }
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      margin-top: 24px;
+    }
+    #carousel {
+      width: 65vw;
+      max-width: 760px;
+      min-width: 330px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0,0,0,0.87);
+      border-radius: 18px;
+      box-shadow: 0 0 18px #00ff99b9;
+      padding: 0 0 0 0;
+      margin: 0 10px;
+    }
+    #capsulesContainer {
+      height: 38vh;
+      overflow-y: auto;
+      width: 100%;
+      padding: 16px 22px 7px 22px;
+      box-sizing: border-box;
+      color: #e8ffe3;
+      font-size: 1.05rem;
+    }
+    .comments-block {
+      height: 17vh;
+      overflow-y: auto;
+      width: 65vw;
+      max-width: 760px;
+      min-width: 330px;
+      margin: 18px auto 0 auto;
+      background: rgba(0,0,0,0.82);
+      border-radius: 14px;
+      color: #e8ffe3;
+      padding: 10px 20px 4px 20px;
+      box-shadow: 0 0 10px #00ff99b7;
+    }
+    .carousel-btn {
+      background: #111;
+      color: #00f
