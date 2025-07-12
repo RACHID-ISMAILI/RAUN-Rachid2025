@@ -73,4 +73,150 @@
     }
     .carousel-btn {
       background: #111;
-      color: #00f
+      color: #00ff99;
+      border: none;
+      font-size: 2.2rem;
+      border-radius: 9px;
+      cursor: pointer;
+      margin: 0 12px;
+      padding: 8px 16px 4px 16px;
+      transition: background 0.18s;
+      z-index: 3;
+    }
+    .carousel-btn:active { background: #040; }
+    /* Pour la responsivité mobile */
+    @media (max-width:700px) {
+      #carousel, .comments-block {
+        width: 97vw;
+        min-width: 0;
+        max-width: 99vw;
+      }
+      .carousel-btn { font-size: 1.2rem; padding: 2px 8px; }
+      #capsulesContainer { font-size: 0.98rem; }
+    }
+    .profile-photo {
+      display: block;
+      margin: 30px auto 6px auto;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      box-shadow: 0 0 30px #00ff99aa, 0 0 0 7px #111;
+      border: 4px solid #001f15;
+      object-fit: cover;
+    }
+    .name {
+      color: #e7ffec;
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: 0.08em;
+      margin-bottom: 0;
+      font-weight: bold;
+    }
+    h1 {
+      color: #1aff85;
+      text-align: center;
+      font-size: 2.2rem;
+      letter-spacing: 0.09em;
+      margin: 0 0 8px 0;
+    }
+    .description {
+      color: #99ffc2;
+      text-align: center;
+      margin-bottom: 6px;
+      font-size: 1.07rem;
+    }
+    nav {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    nav a {
+      color: #00ffff;
+      margin: 0 8px;
+      font-size: 1.08rem;
+      text-decoration: underline;
+    }
+    .message-defilant {
+      color: #ffef97;
+      margin-bottom: 6px;
+      font-size: 1.03rem;
+      width: 94vw;
+    }
+    .subscribe-form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      gap: 8px;
+    }
+    .subscribe-form input[type="email"] {
+      padding: 5px 11px;
+      border-radius: 7px;
+      border: none;
+      background: #122;
+      color: #fff;
+      outline: none;
+      font-size: 1rem;
+    }
+    .subscribe-form button {
+      background: #00ff99;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 15px;
+      font-size: 1.03rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.16s;
+    }
+    .subscribe-form button:hover {
+      background: #008d5c;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrixRain"></canvas>
+  <img src="photo.jpg" alt="Rachid" class="profile-photo">
+  <header>
+    <div class="name">ISMAILI RACHID</div>
+    <h1>ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
+    <div class="description">
+      RAUN est une respiration numérique, une pulsation consciente dans le réseau…
+    </div>
+    <nav>
+      <a href="https://wa.me/212650020464" target="_blank">WhatsApp</a>
+      <a href="mailto:isra1903@outlook.fr">Email</a>
+      <a href="https://www.linkedin.com/in/rachid-ismaili-68b61a27" target="_blank">LinkedIn</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <marquee class="message-defilant">
+      ✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨
+    </marquee>
+  </header>
+
+  <div class="main-content">
+    <div class="carousel-container">
+      <button id="prevCapsule" class="carousel-btn">⬅️</button>
+      <div id="carousel">
+        <div id="capsulesContainer"></div>
+      </div>
+      <button id="nextCapsule" class="carousel-btn">➡️</button>
+    </div>
+
+    <div class="comments-block" id="commentsBlock">
+      <!-- Zone de commentaires, scroll vertical -->
+      <div id="commentsContainer"></div>
+      <form id="commentForm" style="margin-top:6px;">
+        <input type="text" id="commentInput" placeholder="Écrire un commentaire…" style="width:80%;border-radius:5px;border:none;padding:5px 9px;background:#222;color:#e8ffe3;">
+        <button type="submit" style="border:none;border-radius:5px;background:#00ff99;color:#111;padding:5px 11px;cursor:pointer;">Envoyer</button>
+      </form>
+    </div>
+  </div>
+
+  <form class="subscribe-form" onsubmit="window.subscribe(); return false;">
+    <input id="subscribeEmail" type="email" placeholder="Votre email" required>
+    <button type="submit">S'abonner</button>
+  </form>
+  <script src="matrix.js"></script>
+</body>
+</html>
