@@ -14,7 +14,6 @@ async function fetchCapsules() {
   querySnapshot.forEach(docSnap => {
     capsules.push({ id: docSnap.id, ...docSnap.data() });
   });
-  // TRI PAR DATE CORRIGÉ
   capsules.sort((a, b) => {
     const dateA = a.date ? (a.date.toMillis ? a.date.toMillis() : a.date) : 0;
     const dateB = b.date ? (b.date.toMillis ? b.date.toMillis() : b.date) : 0;
@@ -29,7 +28,6 @@ function markVoted(id) {
   localStorage.setItem('voted_' + id, "1");
 }
 
-// Incrémente la lecture si ce n’est pas déjà fait dans la session
 async function incrementLecture(id) {
   if (!sessionStorage.getItem('lu_' + id)) {
     await updateDoc(doc(db, "capsules", id), { lectures: increment(1) });
@@ -37,7 +35,7 @@ async function incrementLecture(id) {
   }
 }
 
-// Affiche une capsule à l’index donné
+// Nouvelle fonction : construction capsule avec scroll interne
 async function afficherCapsule(index) {
   if (capsules.length === 0) {
     document.getElementById("capsulesContainer").innerHTML = "<div>Aucune capsule pour le moment…</div>";
@@ -58,25 +56,26 @@ async function afficherCapsule(index) {
   }
 
   document.getElementById("capsulesContainer").innerHTML = `
-    <div class="capsule">
-      <b>${data.titre || "(Sans titre)"}</b><br>
-      <div style="margin: 10px 0 16px 0;">${data.contenu || ""}</div>
-      <div>
+    <div class="capsule" style="display:flex; flex-direction:column; height:55vh; max-height:55vh;">
+      <div class="capsule-content" style="flex:1 1 0; overflow-y:auto; min-height:0;">
+        <b>${data.titre || "(Sans titre)"}</b><br>
+        <div style="margin: 10px 0 16px 0;">${data.contenu || ""}</div>
+      </div>
+      <div style="margin-top:9px;">
         <button onclick="window.voter('${id}', 'up')" ${canVote(id) ? "" : "disabled"}>👍</button>
         <button onclick="window.voter('${id}', 'down')" ${canVote(id) ? "" : "disabled"}>👎</button>
+        <span>Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</span>
+        <span style="margin-left:16px;">Lectures : <span id="lect-${id}">${data.lectures || 0}</span></span>
       </div>
-      <div>Votes : ${data.votes_up || 0} 👍 / ${data.votes_down || 0} 👎</div>
-      <div>Lectures : <span id="lect-${id}">${data.lectures || 0}</span></div>
-      <textarea id="comment-${id}" placeholder="Écrire un commentaire…" class="comment-textarea"></textarea>
-      <button onclick="window.commenter('${id}')">Envoyer</button>
-      <div class="commentaires"><b>Commentaires :</b><br>${commentairesHtml}</div>
+      <textarea id="comment-${id}" placeholder="Écrire un commentaire…" class="comment-textarea" style="margin-top:12px;"></textarea>
+      <button onclick="window.commenter('${id}')" style="margin-top:7px;">Envoyer</button>
+      <div class="commentaires" style="max-height:16vh; overflow-y:auto; margin-top:7px;"><b>Commentaires :</b><br>${commentairesHtml}</div>
     </div>
   `;
 
-  incrementLecture(id); // Incrémente la lecture à l’affichage seulement
+  incrementLecture(id);
 }
 
-// Navigation gauche/droite
 window.onload = async function() {
   await fetchCapsules();
   afficherCapsule(0);
