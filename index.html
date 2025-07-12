@@ -6,222 +6,11 @@
   <link rel="stylesheet" href="style.css">
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="scripts.js"></script>
-  <style>
-    html, body {
-      height: 100%;
-      min-height: 100vh;
-      width: 100vw;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      background: black;
-      color: #33ff33;
-      font-family: monospace;
-    }
-    body {
-      min-height: 100vh;
-      width: 100vw;
-      overflow-x: hidden;
-    }
-    #matrixRain {
-      position: fixed;
-      top: 0; left: 0; z-index: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
-      opacity: 1;
-    }
-    .header-container {
-      width: 100vw;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      z-index: 10;
-      position: relative;
-      margin-bottom: 8px;
-    }
-    .photo-badge {
-      margin: 22px auto 6px auto;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 144px;
-      height: 144px;
-    }
-    .badge-circle {
-      position: absolute;
-      width: 132px;
-      height: 132px;
-      left: 6px; top: 6px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .badge-text {
-      position: absolute;
-      width: 132px; height: 132px;
-      left: 0; top: 0;
-      color: #55ffa2;
-      font-family: monospace;
-      font-size: 1.04rem;
-      text-align: center;
-      font-weight: bold;
-      letter-spacing: 2.7px;
-      user-select: none;
-      pointer-events: none;
-      transform: rotate(-95deg);
-      z-index: 2;
-    }
-    .profile-photo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      box-shadow: 0 0 38px 0 #00ff99bb;
-      border: 5px solid #001c15;
-      background: #111;
-      object-fit: cover;
-      z-index: 5;
-      display: block;
-      margin: 0 auto;
-      position: relative;
-    }
-    .name {
-      margin-top: 2px;
-      color: #33ff99;
-      font-size: 1.15rem;
-      letter-spacing: 1.7px;
-      text-align: center;
-      z-index: 10;
-      position: relative;
-    }
-    h1 {
-      font-size: 2.2rem;
-      color: #33ff66;
-      margin: 4px 0 8px 0;
-      text-align: center;
-      z-index: 10;
-      position: relative;
-    }
-    .description { color: #80ffcc; font-size: 1.08rem; margin-bottom: 8px; text-align:center; }
-    nav { text-align: center; margin-bottom: 4px;}
-    nav a { color: #00ffff; margin: 0 8px; text-decoration: underline; }
-    .message-defilant { color: #ffcc66; font-size: 1.08rem; margin: 0 0 12px 0; }
-    .carousel-container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      width: 100vw;
-      margin: 18px 0 0 0;
-      z-index: 4;
-    }
-    .carousel-btn {
-      background: transparent;
-      color: #00ff99;
-      font-size: 2.3rem;
-      border: none;
-      cursor: pointer;
-      z-index: 5;
-      height: 44px;
-      align-self: center;
-      margin: 0 9px;
-      user-select: none;
-    }
-    #carousel {
-      width: 100%;
-      max-width: 830px;
-      min-width: 290px;
-      min-height: 380px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      overflow: visible;
-    }
-    #capsulesContainer {
-      width: 100%;
-      z-index: 4;
-      display: flex;
-      justify-content: center;
-    }
-    .capsule {
-      background: rgba(0,30,0,0.96);
-      border: 2.7px solid #00ff66;
-      border-radius: 23px;
-      margin: 0 auto 15px auto;
-      padding: 36px 44px 27px 44px;
-      color: #ccffcc;
-      box-shadow: 0 0 38px 7px #00ff884a;
-      width: 100%;
-      max-width: 790px;
-      min-width: 260px;
-      min-height: 270px;
-      max-height: 61vh;
-      font-size: 1.19rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .capsule-content {
-      width: 100%;
-      flex: 1 1 0;
-      overflow-y: auto;
-      max-height: 28vh;
-      min-height: 7vh;
-      padding-right: 7px;
-      margin-bottom: 12px;
-      text-align: left;
-    }
-    textarea, .comment-textarea, input[type="email"], input[type="password"] {
-      background: #0f2a1a;
-      color: #afffaf;
-      border: 1.2px solid #33ff33;
-      font-family: monospace;
-      font-size: 1.12rem;
-      border-radius: 8px;
-      padding: 11px;
-      width: 99%;
-      min-width: 97%;
-      max-width: 100%;
-      min-height: 92px;
-      box-sizing: border-box;
-      margin-top: 9px;
-      margin-bottom: 12px;
-      display: block;
-    }
-    .commentaires {
-      max-height: 16vh;
-      overflow-y: auto;
-      background: #111;
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin-top: 8px;
-      width: 100%;
-    }
-    .comment {
-      background: #111;
-      color: #b2ffba;
-      padding: 3px 7px;
-      border-radius: 7px;
-      margin: 2px 0;
-      font-size: 0.98rem;
-    }
-    /* Responsive */
-    @media (max-width: 1000px) {
-      .carousel-container, #carousel { min-width: 99vw; }
-      .capsule { min-width: 96vw; max-width: 99vw; padding: 11px 2vw 10px 2vw; font-size: 1.06rem; }
-      .capsule-content { max-height: 19vh; min-height: 6vh; }
-      textarea, .comment-textarea { min-width: 95vw; max-width: 99vw; padding: 10px 2vw 10px 2vw; font-size: 1rem; }
-    }
-  </style>
 </head>
 <body>
   <canvas id="matrixRain"></canvas>
-  <div class="header-container">
-    <div class="photo-badge">
-      <div class="badge-circle">
-        <div class="badge-text" id="badgeText"></div>
-      </div>
-      <img src="photo.jpg" alt="Rachid" class="profile-photo">
-    </div>
+  <img src="photo.jpg" alt="Rachid" class="profile-photo">
+  <header>
     <div class="name">ISMAILI RACHID</div>
     <h1>ISMAILI RACHID – ΔFEU – Ψ – UN</h1>
     <div class="description">
@@ -233,10 +22,11 @@
       <a href="https://www.linkedin.com/in/rachid-ismaili-68b61a27" target="_blank">LinkedIn</a>
       <a href="admin.html">Admin</a>
     </nav>
-    <div class="message-defilant">
+    <marquee class="message-defilant">
       ✨ Je suis vivant en conscience – nul ne peut éteindre ce que je suis… ✨
-    </div>
-  </div>
+    </marquee>
+  </header>
+
   <div class="carousel-container">
     <button id="prevCapsule" class="carousel-btn">⬅️</button>
     <div id="carousel">
@@ -244,30 +34,11 @@
     </div>
     <button id="nextCapsule" class="carousel-btn">➡️</button>
   </div>
+
   <form class="subscribe-form" onsubmit="window.subscribe(); return false;">
     <input id="subscribeEmail" type="email" placeholder="Votre email" required>
     <button type="submit">S'abonner</button>
   </form>
   <script src="matrix.js"></script>
-  <!-- Badge nom circulaire autour de la photo -->
-  <script>
-    // Affiche le nom en cercle autour du badge
-    function circularText(txt, radius, className) {
-      let circle = document.getElementById("badgeText");
-      circle.innerHTML = "";
-      let deg = 360 / txt.length, origin = 0;
-      for (let i = 0; i < txt.length; i++) {
-        let char = txt[i];
-        let span = document.createElement('span');
-        span.innerText = char;
-        span.style.position = "absolute";
-        span.style.height = radius + "px";
-        span.style.transform = "rotate(" + (origin + (deg * i)) + "deg)";
-        span.style.transformOrigin = "0 " + radius + "px";
-        circle.appendChild(span);
-      }
-    }
-    circularText("RAUN • ISMAILI RACHID • 2025 ", 66, "badge-text");
-  </script>
 </body>
 </html>
