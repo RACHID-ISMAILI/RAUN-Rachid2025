@@ -1,9 +1,15 @@
-body {
+html, body {
+  height: 100vh;
+  width: 100vw;
   margin: 0;
+  padding: 0;
+  overflow: hidden; /* Bloque le scroll général */
   background: black;
   color: #33ff33;
   font-family: monospace;
 }
+
+/* Photo badge Matrix */
 .profile-photo {
   width: 110px; height: 110px;
   display: block;
@@ -13,14 +19,17 @@ body {
   position: relative;
   z-index: 2;
 }
+
 header { text-align: center; position: relative; z-index: 3;}
 .name { font-size: 1.3rem; color: #33ff99; letter-spacing: 2px; margin-top: 4px;}
 h1 { font-size: 2rem; color: #33ff66; margin: 4px 0 8px 0; }
 .description { color: #80ffcc; font-size: 1.1rem; margin-bottom: 10px; }
 nav a { color: #00ffff; margin: 0 8px; text-decoration: underline;}
 .message-defilant { color: #ffcc66; font-size: 1.08rem; }
+
 .carousel-container { display: flex; justify-content: center; align-items: center; margin: 15px 0; }
 .carousel-btn { background: transparent; color: #00ff99; font-size: 2.2rem; border: none; cursor: pointer; z-index: 4;}
+
 #carousel {
   width: 100%;
   min-height: 440px;
@@ -29,21 +38,38 @@ nav a { color: #00ffff; margin: 0 8px; text-decoration: underline;}
   align-items: center;
   overflow: hidden;
 }
-#capsulesContainer { width: 100%; z-index: 4;}
+
+#capsulesContainer { width: 100%; z-index: 4; }
+
+/* Capsule Matrix – fixe, avec scroll interne */
 .capsule {
   background: rgba(0,30,0,0.92);
   border: 2.5px solid #00ff66;
   border-radius: 22px;
   margin: 18px auto;
-  padding: 34px 42px 30px 42px;
+  padding: 18px 24px 18px 24px;
   color: #ccffcc;
   box-shadow: 0 0 32px 4px #0f0a;
-  min-width: 480px;
+  min-width: 340px;
   max-width: 920px;
   min-height: 270px;
+  max-height: 55vh;
   font-size: 1.17rem;
   z-index: 4;
+  display: flex;
+  flex-direction: column;
 }
+
+.capsule-content {
+  flex: 1 1 0;
+  overflow-y: auto;
+  max-height: 28vh;
+  min-height: 8vh;
+  padding-right: 6px;
+  margin-bottom: 7px;
+}
+
+/* Formulaires et textarea */
 textarea, .comment-textarea, input[type="email"], input[type="password"] {
   background: #0f2a1a;
   color: #afffaf;
@@ -70,7 +96,25 @@ input[type="email"], input[type="password"] {
   margin: 10px auto 18px auto;
 }
 
-/* FORMULAIRE D’ABONNEMENT : version petite, centrée */
+/* Commentaires – scrollable */
+.commentaires {
+  max-height: 16vh;
+  overflow-y: auto;
+  background: #111;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+}
+.comment {
+  background: #111;
+  color: #b2ffba;
+  padding: 3px 7px;
+  border-radius: 7px;
+  margin: 2px 0;
+  font-size: 0.97rem;
+}
+
+/* Formulaire d’abonnement */
 .subscribe-form {
   margin: 22px auto 0 auto;
   display: flex;
@@ -115,15 +159,7 @@ input[type="email"], input[type="password"] {
   background: #00ff99;
   color: #000;
 }
-.commentaires { margin-top: 8px; }
-.comment {
-  background: #111;
-  color: #b2ffba;
-  padding: 3px 7px;
-  border-radius: 7px;
-  margin: 2px 0;
-  font-size: 0.97rem;
-}
+
 /* --- STYLE LOGIN ADMIN --- */
 .login-box {
   background: rgba(0,32,0,0.78);
@@ -198,6 +234,10 @@ input[type="email"], input[type="password"] {
     max-width: 99vw;
     padding: 16px 4vw 14px 4vw;
     font-size: 1.07rem;
+  }
+  .capsule-content {
+    max-height: 22vh;
+    min-height: 6vh;
   }
   textarea, .comment-textarea {
     min-width: 95vw;
